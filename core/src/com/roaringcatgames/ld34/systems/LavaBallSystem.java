@@ -14,7 +14,7 @@ import com.roaringcatgames.ld34.components.VelocityComponent;
  */
 public class LavaBallSystem extends IteratingSystem {
 
-    private float absMaxRotation = 90f;
+    private float absMaxRotation = 75f;
     private float maxScale = 2f;
     private float rotationRate = 90f;
     private float scaleRate = 1f;

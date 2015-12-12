@@ -62,8 +62,8 @@ public class GameScreen extends ScreenAdapter {
         engine.addSystem(renderingSystem);
 
         engine.addEntity(buildVolcano());
-        engine.addEntity(buildLavaBallEmitter(Input.Keys.F, -5f, 10f));
-        engine.addEntity(buildLavaBallEmitter(Input.Keys.G, 5f, 15f));
+        engine.addEntity(buildLavaBallEmitter(Input.Keys.F, -5f, 5f));
+        engine.addEntity(buildLavaBallEmitter(Input.Keys.G, 5f, 5f));
 
         titleMusic = Assets.getTitleMusic();
         titleMusic.play();
