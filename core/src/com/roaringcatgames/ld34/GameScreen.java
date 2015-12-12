@@ -5,6 +5,7 @@ import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -27,7 +28,11 @@ public class GameScreen extends ScreenAdapter {
     private SpriteBatch batch;
     private IScreenDispatcher dispatcher;
 
-
+    private Music titleMusic;
+    private Music wave1Music;
+    private Music wave2Music;
+    private Music wave3Music;
+    private Music finalMusic;
 
     public GameScreen(SpriteBatch batch, IScreenDispatcher dispatcher){
         super();
@@ -60,6 +65,10 @@ public class GameScreen extends ScreenAdapter {
         engine.addEntity(buildLavaBallEmitter(Input.Keys.F, -5f, 10f));
         engine.addEntity(buildLavaBallEmitter(Input.Keys.G, 5f, 15f));
 
+        titleMusic = Assets.getTitleMusic();
+        titleMusic.play();
+        titleMusic.setLooping(true);
+        titleMusic.setVolume(1f);
         isInitialized = true;
     }
 
