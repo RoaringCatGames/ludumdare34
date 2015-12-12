@@ -3,16 +3,15 @@ package com.roaringcatgames.ld34;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.roaringcatgames.ld34.components.*;
-import com.roaringcatgames.ld34.systems.AnimationSystem;
-import com.roaringcatgames.ld34.systems.GravitySystem;
-import com.roaringcatgames.ld34.systems.MovementSystem;
-import com.roaringcatgames.ld34.systems.RenderingSystem;
+import com.roaringcatgames.ld34.systems.*;
 
 /**
  * Created by barry on 12/9/15 @ 11:12 PM.
@@ -25,6 +24,8 @@ public class GameScreen extends ScreenAdapter {
 
     private SpriteBatch batch;
     private IScreenDispatcher dispatcher;
+
+
 
     public GameScreen(SpriteBatch batch, IScreenDispatcher dispatcher){
         super();
@@ -40,39 +41,36 @@ public class GameScreen extends ScreenAdapter {
         //Rendering system holds our camera so we hold a reference
         //  in case we need to pass it off to another system
         RenderingSystem renderingSystem = new RenderingSystem(batch);
+
+        engine.addSystem(new CleanUpSystem(new Rectangle(-20f, -20f,
+                renderingSystem.getScreenSizeInMeters().x + 40f, renderingSystem.getScreenSizeInMeters().y + 40f)));
         engine.addSystem(new AnimationSystem());
         engine.addSystem(new GravitySystem(new Vector2(0f, -9.8f)));
         engine.addSystem(new MovementSystem());
+        engine.addSystem(new LavaBallEmitterSystem());
+        engine.addSystem(new LavaBallSystem());
         //Rendering system should go last
         engine.addSystem(renderingSystem);
 
-        //Add some default Entities
-        engine.addEntity(buildPuffin());
-
         engine.addEntity(buildLavaBall());
+        engine.addEntity(buildLavaBallEmitter(Input.Keys.F, -5f, 10f));
+        engine.addEntity(buildLavaBallEmitter(Input.Keys.G, 5f, 15f));
 
         isInitialized = true;
     }
 
-    private Entity buildPuffin() {
+    private Entity buildLavaBallEmitter(int key, float xVel, float yVel){
         Entity e = engine.createEntity();
 
-        AnimationComponent a = AnimationComponent.create()
-                .addAnimation("DEFAULT", new Animation(1f / 16f, Assets.getPuffinArray(), Animation.PlayMode.LOOP))
-                .addAnimation("RUNNING", new Animation(1f / 16f, Assets.getPuffinRunArray(), Animation.PlayMode.LOOP));
-        e.add(a);
-        StateComponent state = StateComponent.create()
-                .set("DEFAULT");
-        e.add(state);
-        TextureComponent tc = TextureComponent.create();
-        e.add(tc);
+        e.add(LavaBallEmitterComponent.create()
+            .setTriggerKey(key)
+            .setEmissionVelocity(xVel, yVel));
 
-        TransformComponent tfc = TransformComponent.create()
-                .setPosition(10f, 10f, 1f)
+        Vector2 meterSize = RenderingSystem.getScreenSizeInMeters();
+        e.add(TransformComponent.create()
+                .setPosition(meterSize.x/2f, meterSize.y/2f, 1f)
                 .setRotation(15f)
-                .setScale(0.25f, 0.25f);
-        e.add(tfc);
-
+                .setScale(1f, 1f));
 
         return e;
     }
@@ -81,25 +79,23 @@ public class GameScreen extends ScreenAdapter {
         Entity e = engine.createEntity();
 
         e.add(AnimationComponent.create()
-                .addAnimation("DEFAULT", new Animation(1f / 16f, Assets.getPuffinArray(), Animation.PlayMode.LOOP))
-                .addAnimation("RUNNING", new Animation(1f / 16f, Assets.getPuffinRunArray(), Animation.PlayMode.LOOP)));
+                .addAnimation("DEFAULT", new Animation(1f / 16f, Assets.getLavaBallFrames()))
+                .addAnimation("EXPLODING", new Animation(1f / 16f, Assets.getLavaBallExplodingFrames(), Animation.PlayMode.NORMAL)));
 
         e.add(StateComponent.create()
-            .set("RUNNING"));
+            .set("DEFAULT")
+            .setLooping(true));
 
         e.add(TextureComponent.create());
 
-        TransformComponent tfc = new TransformComponent();
-        tfc.position.set(10f, 10f, 1f);
-        tfc.rotation = 15f;
-        tfc.scale.set(0.25f, 0.25f);
+        Vector2 meterSize = RenderingSystem.getScreenSizeInMeters();
         e.add(TransformComponent.create()
-            .setPosition(10f, 10f, 1f)
-            .setRotation(15f)
-            .setScale(0.25f, 0.25f));
+                .setPosition(meterSize.x / 2f, meterSize.y / 2f, 1f)
+                .setRotation(15f)
+                .setScale(1f, 1f));
 
         e.add(VelocityComponent.create()
-            .setSpeed(15f, 20f));
+            .setSpeed(5f, 15f));
 
         return e;
     }

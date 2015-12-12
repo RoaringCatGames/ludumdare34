@@ -3,7 +3,6 @@ package com.roaringcatgames.ld34;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -28,15 +27,20 @@ public class Assets {
         return am;
     }
 
+    /***
+     * SAFE IMMEDIATELY after am.load() is called
+     * @return AtlasRegions for the loading animation.
+     */
     public static Array<TextureAtlas.AtlasRegion> getLoadingFrames(){
         return am.get(LOADING_ATLAS, TEXTURE_ATLAS).findRegions("loading");
     }
 
-    public static Array<TextureAtlas.AtlasRegion> getPuffinArray(){
-        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("puffin/puffin");
+
+    public static Array<TextureAtlas.AtlasRegion> getLavaBallFrames(){
+        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("lavaball/lavaball");
     }
-    public static Array<TextureAtlas.AtlasRegion> getPuffinRunArray(){
-        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("puffin/runnin");
+    public static Array<TextureAtlas.AtlasRegion> getLavaBallExplodingFrames(){
+        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("lavaball/lavaball");
     }
 
     private static Class<TextureAtlas> TEXTURE_ATLAS = TextureAtlas.class;
