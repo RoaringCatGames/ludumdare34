@@ -61,7 +61,7 @@ public class GameScreen extends ScreenAdapter {
         //Rendering system should go last
         engine.addSystem(renderingSystem);
 
-        engine.addEntity(buildLavaBall());
+        engine.addEntity(buildVolcano());
         engine.addEntity(buildLavaBallEmitter(Input.Keys.F, -5f, 10f));
         engine.addEntity(buildLavaBallEmitter(Input.Keys.G, 5f, 15f));
 
@@ -88,27 +88,14 @@ public class GameScreen extends ScreenAdapter {
         return e;
     }
 
-    private Entity buildLavaBall(){
+    private Entity buildVolcano(){
         Entity e = engine.createEntity();
-
-        e.add(AnimationComponent.create()
-                .addAnimation("DEFAULT", new Animation(1f / 16f, Assets.getLavaBallFrames()))
-                .addAnimation("EXPLODING", new Animation(1f / 16f, Assets.getLavaBallExplodingFrames(), Animation.PlayMode.NORMAL)));
-
-        e.add(StateComponent.create()
-            .set("DEFAULT")
-            .setLooping(true));
-
-        e.add(TextureComponent.create());
 
         Vector2 meterSize = RenderingSystem.getScreenSizeInMeters();
         e.add(TransformComponent.create()
-                .setPosition(meterSize.x / 2f, meterSize.y / 2f, 1f)
-                .setRotation(15f)
+                .setPosition(meterSize.x/2f, meterSize.y/2f, 1f)
+                .setRotation(0f)
                 .setScale(1f, 1f));
-
-        e.add(VelocityComponent.create()
-            .setSpeed(5f, 15f));
 
         return e;
     }
