@@ -67,3 +67,6 @@ build/
 android/assets/animations
 android/assets/sprites
 android/assets/loading
+
+#Art Source Files
+**/*.scml
