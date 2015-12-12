@@ -11,6 +11,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ArrayMap;
+import com.roaringcatgames.ld34.ActionProcessor;
 import com.roaringcatgames.ld34.Assets;
 import com.roaringcatgames.ld34.components.*;
 
@@ -37,7 +38,7 @@ public class LavaBallEmitterSystem extends IteratingSystem {
         super.update(deltaTime);
 
         for(int key : emitterMap.keys()) {
-            if (Gdx.input.isKeyJustPressed(key)) {
+            if (ActionProcessor.isKeyJustReleased(key)) {
                 for (Entity e : emitterMap.get(key)) {
                     LavaBallEmitterComponent comp = lbem.get(e);
                     TransformComponent tfc = tm.get(e);

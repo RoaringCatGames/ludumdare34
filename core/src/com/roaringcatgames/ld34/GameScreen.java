@@ -13,6 +13,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.roaringcatgames.ld34.components.*;
 import com.roaringcatgames.ld34.systems.*;
 
+import javax.swing.*;
+
 /**
  * Created by barry on 12/9/15 @ 11:12 PM.
  */
@@ -37,6 +39,8 @@ public class GameScreen extends ScreenAdapter {
         Gdx.app.log("GameScreen", "Initializing");
         isInitialized = true;
         engine = new PooledEngine();
+
+        Gdx.input.setInputProcessor(new ActionProcessor(Input.Keys.F, Input.Keys.G));
 
         //Rendering system holds our camera so we hold a reference
         //  in case we need to pass it off to another system
@@ -103,6 +107,7 @@ public class GameScreen extends ScreenAdapter {
 
     private void update(float delta){
         engine.update(delta);
+        ActionProcessor.clear();
     }
 
     @Override

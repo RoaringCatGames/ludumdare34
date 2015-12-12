@@ -3,7 +3,6 @@ package com.roaringcatgames.ld34.systems;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 import com.roaringcatgames.ld34.components.LavaBallComponent;
 
