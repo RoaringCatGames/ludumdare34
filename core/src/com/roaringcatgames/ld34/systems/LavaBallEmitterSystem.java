@@ -7,6 +7,7 @@ import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
@@ -27,7 +28,8 @@ public class LavaBallEmitterSystem extends IteratingSystem {
     private ArrayMap<Integer, Array<Entity>> emitterMap;
     private ArrayMap<Integer, Float> charges;
 
-    private float _chargeIncrease = 6f;
+    private float _maxChargeModifier = 2f;
+    private float _chargeIncrease =6f;
 
     public LavaBallEmitterSystem() {
         super(Family.all(LavaBallEmitterComponent.class).get());
@@ -46,16 +48,18 @@ public class LavaBallEmitterSystem extends IteratingSystem {
                 for (Entity e : emitterMap.get(key)) {
                     LavaBallEmitterComponent comp = lbem.get(e);
                     TransformComponent tfc = tm.get(e);
-                    Vector2 vel = comp.emissionVelocity.cpy();
-                    float adjust = charges.get(key);
-                    float x = vel.x == 0 ? 0 : vel.x >= 0 ? vel.x + adjust : vel.x - adjust;
-                    float y = vel.y == 0 ? 0 : vel.y >= 0 ? vel.y + adjust : vel.y - adjust;
-                    vel.set(x, y);
-                    this.getEngine().addEntity(buildLavaBall(tfc.position, vel));
+                    this.getEngine().addEntity(buildLavaBall(tfc.position,
+                            comp.emissionVelocity.cpy().scl(charges.get(key))));
                     charges.put(key, 0f);
                 }
             }else if (ActionProcessor.isKeyDown(key)) {
-                charges.put(key, charges.get(key)+(_chargeIncrease*deltaTime));
+                float currentCharge = charges.get(key);
+                if(currentCharge < _maxChargeModifier){
+                    //Throttle to max charge
+                    currentCharge = Math.min(_maxChargeModifier, (currentCharge + _chargeIncrease*deltaTime));
+                    charges.put(key, currentCharge);
+                }
+
             }
 
 
