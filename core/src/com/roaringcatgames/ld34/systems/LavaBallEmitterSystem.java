@@ -25,12 +25,16 @@ public class LavaBallEmitterSystem extends IteratingSystem {
     private ComponentMapper<LavaBallEmitterComponent> lbem;
     private ComponentMapper<TransformComponent> tm;
     private ArrayMap<Integer, Array<Entity>> emitterMap;
+    private ArrayMap<Integer, Float> charges;
+
+    private float _chargeIncrease = 6f;
 
     public LavaBallEmitterSystem() {
         super(Family.all(LavaBallEmitterComponent.class).get());
         lbem = ComponentMapper.getFor(LavaBallEmitterComponent.class);
         tm = ComponentMapper.getFor(TransformComponent.class);
         emitterMap = new ArrayMap<>();
+        charges = new ArrayMap<>();
     }
 
     @Override
@@ -42,9 +46,21 @@ public class LavaBallEmitterSystem extends IteratingSystem {
                 for (Entity e : emitterMap.get(key)) {
                     LavaBallEmitterComponent comp = lbem.get(e);
                     TransformComponent tfc = tm.get(e);
-                    this.getEngine().addEntity(buildLavaBall(tfc.position, comp.emissionVelocity));
+                    Vector2 vel = comp.emissionVelocity.cpy();
+                    float adjust = charges.get(key);
+                    float x = vel.x == 0 ? 0 : vel.x >= 0 ? vel.x + adjust : vel.x - adjust;
+                    float y = vel.y == 0 ? 0 : vel.y >= 0 ? vel.y + adjust : vel.y - adjust;
+                    vel.set(x, y);
+                    this.getEngine().addEntity(buildLavaBall(tfc.position, vel));
+                    charges.put(key, 0f);
                 }
+            }else if (ActionProcessor.isKeyDown(key)) {
+                charges.put(key, charges.get(key)+(_chargeIncrease*deltaTime));
             }
+
+
+
+
             //Clear all the entities
             emitterMap.get(key).clear();
         }
@@ -56,6 +72,10 @@ public class LavaBallEmitterSystem extends IteratingSystem {
         LavaBallEmitterComponent lbe = lbem.get(entity);
         if(!emitterMap.containsKey(lbe.triggerKey)){
             emitterMap.put(lbe.triggerKey, new Array<Entity>());
+        }
+
+        if(!charges.containsKey(lbe.triggerKey)){
+            charges.put(lbe.triggerKey, 0.1f);
         }
 
         emitterMap.get(lbe.triggerKey).add(entity);
