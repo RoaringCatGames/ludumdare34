@@ -12,4 +12,8 @@ public class TextureComponent implements Component {
     public static TextureComponent create(){
         return new TextureComponent();
     }
+    public TextureComponent setRegion(TextureRegion region){
+        this.region = region;
+        return this;
+    }
 }

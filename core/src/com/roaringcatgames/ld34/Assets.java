@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.ArrayMap;
 
 /**
  * Created by barry on 12/9/15 @ 11:17 PM.
@@ -22,7 +23,7 @@ public class Assets {
         am.finishLoading();
         am.load(ANI_ATLAS, TEXTURE_ATLAS);
         am.load(TITLE_SONG, MUSIC);
-//        am.load(SPRITE_ATLAS, TEXTURE_ATLAS);
+        am.load(SPRITE_ATLAS, TEXTURE_ATLAS);
 //        am.load(FONT, BITMAP_FONT);
 
         return am;
@@ -42,6 +43,48 @@ public class Assets {
         return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("lavaball/lavaball");
     }
 
+    public static TextureRegion getDirt(){
+        return am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("Dirt");
+    }
+    public static TextureRegion getBackground(){
+        return am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("Background");
+    }
+    public static TextureRegion getBackGrass(){
+        return am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("Grass/GrassBack");
+    }
+    public static TextureRegion getFrontGrass(){
+        return am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("Grass/GrassFront");
+    }
+
+    private static ArrayMap<String, Array<TextureAtlas.AtlasRegion>> volcanoStateFrames;
+    public static ArrayMap<String, Array<TextureAtlas.AtlasRegion>> getVolcanoStateFrames(){
+        if(volcanoStateFrames == null){
+            volcanoStateFrames = new ArrayMap<>();
+            volcanoStateFrames.put("DEFAULT", am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("volcano/Volcano"));
+        }
+
+        return volcanoStateFrames;
+    }
+
+    public static Array<TextureAtlas.AtlasRegion> getBackCloudFrames(){
+        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("clouds/CloudBack");
+    }
+    public static Array<TextureAtlas.AtlasRegion> getMidBackCloudFrames(){
+        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("clouds/CloudMidB");
+    }
+    public static Array<TextureAtlas.AtlasRegion> getMidFrontCloudFrames(){
+        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("clouds/CloudMidF");
+    }
+    public static Array<TextureAtlas.AtlasRegion> getFrontCloudFrames(){
+        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("clouds/CloudFront");
+    }
+    public static Array<TextureAtlas.AtlasRegion> getCloudPuffWhiteFrames(){
+        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("clouds/CloudPuffWhite");
+    }
+    public static Array<TextureAtlas.AtlasRegion> getCloudPuffBlueFrames(){
+        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("clouds/CloudPuffBlue");
+    }
+
     public static Music getTitleMusic(){
         return am.get(TITLE_SONG, MUSIC);
     }
@@ -56,7 +99,4 @@ public class Assets {
     private static final String ANI_ATLAS = "animations/animations.atlas";
     private static final String TITLE_SONG = "music/title-music.mp3";
     private static final String SPRITE_ATLAS = "sprites/sprites.atlas";
-
-
-    public static TextureRegion splashScreen;
 }
