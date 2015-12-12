@@ -68,7 +68,7 @@ public class RenderingSystem extends SortedIteratingSystem {
     public void update(float deltaTime) {
         super.update(deltaTime);
 
-        renderQueue.sort(comparator);
+        //renderQueue.sort(comparator);
 
         cam.update();
         batch.setProjectionMatrix(cam.combined);

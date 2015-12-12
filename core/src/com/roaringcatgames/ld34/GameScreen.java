@@ -45,6 +45,8 @@ public class GameScreen extends ScreenAdapter {
         engine.addSystem(new AnimationSystem());
         engine.addSystem(renderingSystem);
         engine.addSystem(new PhysicsSystem(world));
+        engine.addSystem(new GravitySystem(new Vector2(0f, -9.8f)));
+        engine.addSystem(new MovementSystem());
 
         engine.addSystem(new PhysicsDebugSystem(world, renderingSystem.getCamera()));
         engine.addSystem(new UselessStateSwapSystem());
@@ -52,6 +54,8 @@ public class GameScreen extends ScreenAdapter {
         Entity e = buildPuffin(world);
         engine.addEntity(e);
         engine.addEntity(buildFloorEntity(world));
+
+        engine.addEntity(buildLavaBall());
 
         isInitialized = true;
     }
@@ -107,6 +111,33 @@ public class GameScreen extends ScreenAdapter {
         circle.dispose();
 
         e.add(bc);
+        return e;
+    }
+
+    private Entity buildLavaBall(){
+        Entity e = engine.createEntity();
+        e.add(new PuffinComponent());
+
+        AnimationComponent a = new AnimationComponent();
+        a.animations.put("DEFAULT", new Animation(1f/16f, Assets.getPuffinArray(), Animation.PlayMode.LOOP));
+        a.animations.put("RUNNING", new Animation(1f / 16f, Assets.getPuffinRunArray(), Animation.PlayMode.LOOP));
+        e.add(a);
+        StateComponent state = new StateComponent();
+        state.set("DEFAULT");
+        e.add(state);
+        TextureComponent tc = new TextureComponent();
+        e.add(tc);
+
+        TransformComponent tfc = new TransformComponent();
+        tfc.position.set(10f, 10f, 1f);
+        tfc.rotation = 15f;
+        tfc.scale.set(0.25f, 0.25f);
+        e.add(tfc);
+
+        VelocityComponent vel = new VelocityComponent();
+        vel.speed.set(15f, 20f);
+        e.add(vel);
+
         return e;
     }
 
