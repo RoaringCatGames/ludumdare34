@@ -16,13 +16,15 @@ public class VolcanoGame extends Game {
 
 	@Override
 	public void create () {
-        am = Assets.load();
 		batch = new SpriteBatch();
 		screenDispatcher = new ScreenDispatcher();
         Screen splashScreen = new SplashScreen(batch, screenDispatcher);
         Screen gameScreen = new GameScreen(batch, screenDispatcher);
         screenDispatcher.AddScreen(splashScreen);
         screenDispatcher.AddScreen(gameScreen);
+        //NOTE: We force finishLoading of the Loading Frames
+        //  so we can count on it.
+        am = Assets.load();
 		setScreen(splashScreen);
 	}
 

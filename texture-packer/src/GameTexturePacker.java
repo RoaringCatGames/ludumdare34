@@ -39,7 +39,7 @@ public class GameTexturePacker {
         TexturePacker.process(settings, SPRITES_INPUT_DIR, SPRITES_OUTPUT_DIR, SPRITES_PACK_FILE);
 
         settings.combineSubdirectories = false;
-        //settings.scale = HUNDRED_PERCENT;
+        settings.scale = FIFTY_PERCENT;
         TexturePacker.process(settings, LOADING_INPUT_DIR, LOADING_OUTPUT_DIR, LOADING_PACK_FILE);
     }
 }
