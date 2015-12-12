@@ -10,9 +10,20 @@ public class StateComponent implements Component {
     public float time = 0.0f;
     public boolean isLooping = false;
 
-    public void set(String newState){
+    public static StateComponent create(){
+        return new StateComponent();
+    }
+
+    //Creating Chainable Component Setters to make building easier
+    public StateComponent set(String newState){
         state = newState;
         time = 0.0f;
+        return this;
+    }
+
+    public StateComponent setLooping(boolean isLoopin){
+        this.isLooping = isLoopin;
+        return this;
     }
 
     public String get(){

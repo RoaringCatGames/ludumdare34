@@ -28,9 +28,9 @@ public class VolcanoGame extends Game {
 
 	@Override
 	public void render () {
-        float r = 0/255f;
-        float g = 24f/255f;
-        float b = 72f/255f;
+        float r = 180/255f;
+        float g = 180/255f;
+        float b = 200/255f;
         Gdx.gl.glClearColor(r, g, b, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 

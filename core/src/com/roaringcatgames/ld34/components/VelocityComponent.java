@@ -8,5 +8,13 @@ import com.badlogic.gdx.math.Vector2;
  */
 public class VelocityComponent implements Component {
     public Vector2 speed = new Vector2();
-    public Vector2 acceleration = new Vector2();
+
+    public static VelocityComponent create(){
+        return new VelocityComponent();
+    }
+
+    public VelocityComponent setSpeed(float x, float y){
+        this.speed.set(x, y);
+        return this;
+    }
 }

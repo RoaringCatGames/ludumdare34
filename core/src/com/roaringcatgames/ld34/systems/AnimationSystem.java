@@ -5,8 +5,8 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.roaringcatgames.ld34.components.AnimationComponent;
-import com.roaringcatgames.ld34.components.TextureComponent;
 import com.roaringcatgames.ld34.components.StateComponent;
+import com.roaringcatgames.ld34.components.TextureComponent;
 
 public class AnimationSystem extends IteratingSystem {
 
