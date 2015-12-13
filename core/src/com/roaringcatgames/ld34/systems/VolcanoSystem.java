@@ -46,7 +46,6 @@ public class VolcanoSystem extends IteratingSystem {
         }
 
         for(Entity e:volcanoes) {
-            Gdx.app.log("Volcano System", "IsFiring: " + isFiring + " IsCharging: " + isCharging);
             StateComponent sc = sm.get(e);
             AnimationComponent ac = am.get(e);
             if (isFiring && sc.get() != "FIRING") {

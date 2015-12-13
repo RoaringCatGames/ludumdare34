@@ -9,7 +9,6 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
@@ -35,6 +34,14 @@ public class GameScreen extends ScreenAdapter {
     private Music wave3Music;
     private Music finalMusic;
 
+    private Entity wave1Left;
+    private Entity wave1Right;
+    private Entity wave2Left;
+    private Entity wave2Right;
+    private Entity wave3Left;
+    private Entity wave3Right;
+
+
     public GameScreen(SpriteBatch batch, IScreenDispatcher dispatcher){
         super();
         this.batch = batch;
@@ -59,8 +66,10 @@ public class GameScreen extends ScreenAdapter {
         engine.addSystem(new GravitySystem(new Vector2(0f, -9.8f)));
         engine.addSystem(new ScreenWrapSystem(0f, 60f));
         engine.addSystem(new MovementSystem());
+        engine.addSystem(new ArmySpawnerSystem());
         engine.addSystem(new LavaBallEmitterSystem());
         engine.addSystem(new LavaBallSystem(Assets.getMediumImpact()));
+
         //Rendering system should go last
         engine.addSystem(renderingSystem);
 
@@ -71,11 +80,32 @@ public class GameScreen extends ScreenAdapter {
         engine.addEntity(buildLavaBallEmitter(Input.Keys.F, -5f, 5f));
         engine.addEntity(buildLavaBallEmitter(Input.Keys.J, 5f, 5f));
 
+        addWaveEmitters();
+
         titleMusic = Assets.getTitleMusic();
         titleMusic.play();
         titleMusic.setLooping(true);
         titleMusic.setVolume(1f);
         isInitialized = true;
+    }
+
+    private void addWaveEmitters() {
+        Vector2 meterSize = RenderingSystem.getScreenSizeInMeters();
+        wave1Left = buildArmyEmitter(1, -3.75f, 2.5f, 3f, true);
+        wave1Right = buildArmyEmitter(-1, meterSize.x+3.75f, 2.5f, 3f, true);
+
+        wave2Left = buildArmyEmitter(1, -2.5f, 2.5f, 2.5f, false);
+        wave2Right = buildArmyEmitter(-1, meterSize.x+2.5f, 2.5f, 2.5f, false);
+
+        wave3Left = buildArmyEmitter(1, -1.25f, 2.5f, 2f, false);
+        wave3Right = buildArmyEmitter(-1, meterSize.x+1.5f, 2.5f, 2f, false);
+
+        engine.addEntity(wave1Left);
+        engine.addEntity(wave1Right);
+        engine.addEntity(wave2Left);
+        engine.addEntity(wave2Right);
+        engine.addEntity(wave3Left);
+        engine.addEntity(wave3Right);
     }
 
     private Entity buildLavaBallEmitter(int key, float xVel, float yVel){
@@ -94,12 +124,24 @@ public class GameScreen extends ScreenAdapter {
         return e;
     }
 
+    private Entity buildArmyEmitter(int direction, float x, float y, float intervalSeconds, boolean startActive) {
+        Entity e = engine.createEntity();
+
+        e.add(ArmySpawnerComponent.create()
+                .setActive(startActive)
+                .setDirection(direction)
+                .setIntervalSeconds(intervalSeconds));
+        e.add(TransformComponent.create()
+                .setPosition(x, y));
+        return e;
+    }
+
     private Entity buildBackground(){
         Entity e = engine.createEntity();
 
         Vector2 meterSize = RenderingSystem.getScreenSizeInMeters();
         e.add(TransformComponent.create()
-                .setPosition(meterSize.x/2f, meterSize.y/2f, 100f)
+                .setPosition(meterSize.x / 2f, meterSize.y / 2f, 100f)
                 .setRotation(0f)
                 .setScale(1f, 1f));
 
@@ -141,7 +183,7 @@ public class GameScreen extends ScreenAdapter {
 
         Entity dirt = engine.createEntity();
         dirt.add(TransformComponent.create()
-            .setPosition(meterSize.x/2f, 6f, ZUtil.DirtZ)
+            .setPosition(meterSize.x / 2f, 6f, ZUtil.DirtZ)
             .setScale(1f, 1f));
         dirt.add(TextureComponent.create()
             .setRegion(Assets.getDirt()));
@@ -167,30 +209,36 @@ public class GameScreen extends ScreenAdapter {
     private void addClouds(){
         Vector2 meterSize = RenderingSystem.getScreenSizeInMeters();
 
-        Entity bgClouds = createScreenWrappedEntity(meterSize.x / 2f, meterSize.y / 2f, 80f,
-                    0f, 1f, 1f, Assets.getBackCloudFrames(), 1f);
+        engine.addEntity(createScreenWrappedEntity(meterSize.x / 2f, meterSize.y / 2f, 80f,
+                0f, 1f, 1f, Assets.getBackCloudFrames(), 1f));
+        engine.addEntity(createScreenWrappedEntity((meterSize.x/2f) - RenderingSystem.PixelsToMeters(1000f),
+                meterSize.y / 2f, 80f,
+                0f, 1f, 1f, Assets.getBackCloudFrames(), 1f));
 
-        Entity bmClouds = createScreenWrappedEntity(meterSize.x/2f, meterSize.y/3f, 79f,
-                0f, 1f, 1f, Assets.getMidBackCloudFrames(), 2f);
+        engine.addEntity(createScreenWrappedEntity(meterSize.x/2f, meterSize.y/3f, 79f,
+                0f, 1f, 1f, Assets.getMidBackCloudFrames(), 2f));
+        engine.addEntity(createScreenWrappedEntity((meterSize.x/2f) - RenderingSystem.PixelsToMeters(1000f),
+                meterSize.y/3f, 79f,
+                0f, 1f, 1f, Assets.getMidBackCloudFrames(), 2f));
 
-        Entity fmClouds = createScreenWrappedEntity(meterSize.x/2f, meterSize.y/3f, 78f,
-                0f, 1f, 1f, Assets.getMidFrontCloudFrames(), 3f);
+        engine.addEntity(createScreenWrappedEntity(meterSize.x/2f, meterSize.y/3f, 78f,
+                0f, 1f, 1f, Assets.getMidFrontCloudFrames(), 3f));
+        engine.addEntity(createScreenWrappedEntity((meterSize.x/2f) - RenderingSystem.PixelsToMeters(1000f),
+                meterSize.y/3f, 78f,
+                0f, 1f, 1f, Assets.getMidFrontCloudFrames(), 3f));
 
-        Entity fgClouds = createScreenWrappedEntity(meterSize.x/2f, meterSize.y/3f, 77f,
-                0f, 1f, 1f, Assets.getFrontCloudFrames(), 4f);
+        engine.addEntity(createScreenWrappedEntity(meterSize.x/2f, meterSize.y/3f, 77f,
+                0f, 1f, 1f, Assets.getFrontCloudFrames(), 4f));
+        engine.addEntity(createScreenWrappedEntity((meterSize.x/2f) - RenderingSystem.PixelsToMeters(1000f),
+                meterSize.y/3f, 77f,
+                0f, 1f, 1f, Assets.getFrontCloudFrames(), 4f));
 
-        Entity whitePuff = createScreenWrappedEntity(meterSize.x / 4f, (meterSize.y / 3f)*2f, 77f,
-                0f, 1f, 1f, Assets.getCloudPuffWhiteFrames(), 5f);
+        engine.addEntity(createScreenWrappedEntity(meterSize.x / 4f, (meterSize.y / 3f)*2f, 77f,
+                0f, 1f, 1f, Assets.getCloudPuffWhiteFrames(), 5f));
 
-        Entity bluePuff = createScreenWrappedEntity((meterSize.x / 4f) * 3f, (meterSize.y / 3f) * 2f, 77f,
-                0f, 1f, 1f, Assets.getCloudPuffBlueFrames(), 4f);
+        engine.addEntity(createScreenWrappedEntity((meterSize.x / 4f) * 3f, (meterSize.y / 3f) * 2f, 77f,
+                0f, 1f, 1f, Assets.getCloudPuffBlueFrames(), 4f));
 
-        engine.addEntity(bgClouds);
-        engine.addEntity(bmClouds);
-        engine.addEntity(fmClouds);
-        engine.addEntity(fgClouds);
-        engine.addEntity(whitePuff);
-        engine.addEntity(bluePuff);
     }
 
     private Entity createScreenWrappedEntity(float xPos,
@@ -213,14 +261,34 @@ public class GameScreen extends ScreenAdapter {
                 .set("DEFAULT"));
         entity.add(ScreenWrapComponent.create());
         entity.add(VelocityComponent.create()
-            .setSpeed(xSpeed, 0f));
+                .setSpeed(xSpeed, 0f));
         entity.add(KinematicComponent.create());
 
         return entity;
     }
 
+    private void toggleWaves(Entity wl, Entity wr){
+        ArmySpawnerComponent wlc = wl.getComponent(ArmySpawnerComponent.class);
+        wlc.isActive = !wlc.isActive;
+        ArmySpawnerComponent wrc= wr.getComponent(ArmySpawnerComponent.class);
+        wrc.isActive = !wrc.isActive;
+    }
 
     private void update(float delta){
+
+        //TODO: Remove:
+        if(Gdx.input.isKeyJustPressed(Input.Keys.NUM_1)){
+            toggleWaves(wave1Left, wave1Right);
+        }
+
+        if(Gdx.input.isKeyJustPressed(Input.Keys.NUM_2)){
+            toggleWaves(wave2Left, wave2Right);
+        }
+
+        if(Gdx.input.isKeyJustPressed(Input.Keys.NUM_3)){
+            toggleWaves(wave3Left, wave3Right);
+        }
+
         engine.update(delta);
         ActionProcessor.clear();
     }

@@ -72,6 +72,10 @@ public class Assets {
         return volcanoStateFrames;
     }
 
+    public static Array<TextureAtlas.AtlasRegion> getPikemanFrames(){
+        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("army/pikeman");
+    }
+
     public static Array<TextureAtlas.AtlasRegion> getBackCloudFrames(){
         return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("clouds/CloudBack");
     }

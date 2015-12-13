@@ -9,4 +9,5 @@ public class ZUtil {
     public static float DirtZ = 20f;
     public static float FireballBackZ = VolcanoZ +2f;
     public static float FireballFrontZ = 5f;
+    public static float ArmyZ = 4f;
 }
