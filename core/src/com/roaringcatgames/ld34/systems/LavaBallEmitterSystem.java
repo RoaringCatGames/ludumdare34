@@ -98,7 +98,7 @@ public class LavaBallEmitterSystem extends IteratingSystem {
         e.add(TransformComponent.create()
                 .setPosition(origin.x, origin.y, ZUtil.VolcanoZ + 1f)
                 .setRotation(15f)
-                .setScale(xScale, 1f));
+                .setScale(xScale*0.5f, 0.5f));
 
         e.add(VelocityComponent.create()
                 .setSpeed(vel.x, vel.y));

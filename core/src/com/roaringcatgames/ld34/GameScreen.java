@@ -83,6 +83,7 @@ public class GameScreen extends ScreenAdapter {
         engine.addSystem(renderingSystem);
         engine.addSystem(new HealthRenderSystem(renderingSystem.getCamera()));
         engine.addSystem(new DebugSystem(batch, engine, renderingSystem.getCamera()));
+        engine.addSystem(new CitySystem(this));
 
         addClouds();
         addGroundEnvironment();
@@ -453,6 +454,10 @@ public class GameScreen extends ScreenAdapter {
                 //StartWave
                 addWaveEmitters();
                 isWaving = true;
+                break;
+            case "GAMEOVER":
+                engine.getSystem(MovementSystem.class).setProcessing(false);
+                Gdx.app.log("GameScreen", "YOU LOSE!!");
                 break;
         }
     }
