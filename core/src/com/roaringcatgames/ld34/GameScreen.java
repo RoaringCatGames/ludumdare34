@@ -74,7 +74,7 @@ public class GameScreen extends ScreenAdapter {
         engine.addSystem(new MovementSystem());
         engine.addSystem(new BoundsSystem());
         engine.addSystem(new ArmySpawnerSystem());
-        //engine.addSystem(new ArmyUnitSystem(this));
+        engine.addSystem(new ArmyUnitSystem(this));
         engine.addSystem(new LavaBallEmitterSystem());
         engine.addSystem(new LavaBallSystem(Assets.getMediumImpact()));
         engine.addSystem(new MenuSystem(this));
@@ -243,6 +243,7 @@ public class GameScreen extends ScreenAdapter {
     private void addBuildingComponent(float x, float y, float boundW, float boundH) {
         Entity bld = engine.createEntity();
         bld.add(TextureComponent.create());
+        bld.add(BuildingComponent.create());
         bld.add(TransformComponent.create()
             .setPosition(x, y, ZUtil.TownZ)
             .setScale(0.5f, 0.5f));

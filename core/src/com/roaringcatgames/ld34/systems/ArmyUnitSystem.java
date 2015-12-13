@@ -47,7 +47,7 @@ public class ArmyUnitSystem extends IteratingSystem {
             VelocityComponent vc = vm.get(unit);
             for(Entity building:buildings){
                 BoundsComponent bb = bm.get(building);
-                if(ub.bounds.overlaps(ub.bounds)){
+                if(bb.bounds.overlaps(ub.bounds)){
                     vc.setSpeed(0f, 0f);
                     //Get Building Health here
                     break;
