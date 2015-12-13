@@ -159,8 +159,8 @@ public class MenuSystem extends IteratingSystem {
     }
 
     private void generateTargets(){
-        Entity leftUnit = buildUnitComponent(-1.25f, 2.5f, -1f, 10f, false);
-        Entity rightUnit = buildUnitComponent(61.25f, 2.5f, 1f, -10f, true);
+        Entity leftUnit = buildUnitComponent(-1.25f, 5f, -1f, 10f, false);
+        Entity rightUnit = buildUnitComponent(61.25f, 5f, 1f, -10f, true);
 
         getEngine().addEntity(leftUnit);
         getEngine().addEntity(rightUnit);

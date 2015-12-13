@@ -103,13 +103,13 @@ public class GameScreen extends ScreenAdapter {
         wave1Music.setLooping(true);
         wave1Music.setVolume(1f);
 
-//        wave2Music = Assets.getWaveTwoMusic();
-//        wave2Music.setLooping(true);
-//        wave2Music.setVolume(1f);
-//
-//        wave3Music = Assets.getWaveThreeMusic();
-//        wave3Music.setLooping(true);
-//        wave3Music.setVolume(1f);
+        wave2Music = Assets.getWaveTwoMusic();
+        wave2Music.setLooping(true);
+        wave2Music.setVolume(1f);
+
+        wave3Music = Assets.getWaveThreeMusic();
+        wave3Music.setLooping(true);
+        wave3Music.setVolume(1f);
 //
 //        finalMusic = Assets.getEndMusic();
 //        finalMusic.setLooping(true);
@@ -446,12 +446,15 @@ public class GameScreen extends ScreenAdapter {
                 wave1Music.play();
                 //StartWave
                 addWaveEmitters();
-
+                isWaving = true;
                 break;
         }
     }
 
 
+    private boolean isWaving = false;
+    private float elapsedWaveTime = 0f;
+    private int wave = 1;
     private void update(float delta){
 
         //TODO: Remove:
@@ -465,6 +468,35 @@ public class GameScreen extends ScreenAdapter {
 
         if(Gdx.input.isKeyJustPressed(Input.Keys.NUM_3)){
             toggleWaves(wave3Left, wave3Right);
+        }
+
+
+        if(isWaving){
+            elapsedWaveTime += delta;
+            if(elapsedWaveTime >= 10*wave){
+                Gdx.app.log("GAME SCREEN", "Wave " + wave + " finished");
+                elapsedWaveTime = 0f;
+                wave++;
+                switch(wave){
+                    case 2:
+                        wave1Music.stop();
+                        wave2Music.play();
+                        toggleWaves(wave2Left, wave2Right);
+                        break;
+                    case 3:
+                        wave2Music.stop();
+                        wave3Music.play();
+                        toggleWaves(wave3Left, wave3Right);
+                        break;
+                    default:
+                        toggleWaves(wave1Left, wave1Right);
+                        toggleWaves(wave2Left, wave2Right);
+                        toggleWaves(wave3Left, wave3Right);
+                        isWaving = false;
+                        Gdx.app.log("Game Screen", "You Survived!");
+                        break;
+                }
+            }
         }
 
         engine.update(delta);
