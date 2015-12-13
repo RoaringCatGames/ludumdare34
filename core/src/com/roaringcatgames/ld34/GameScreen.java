@@ -111,7 +111,7 @@ public class GameScreen extends ScreenAdapter {
 
         Vector2 meterSize = RenderingSystem.getScreenSizeInMeters();
         e.add(TransformComponent.create()
-                .setPosition(meterSize.x/2f, meterSize.y/3f, 21f)
+                .setPosition(meterSize.x/2f, meterSize.y/3f, ZUtil.VolcanoZ)
                 .setRotation(0f)
                 .setScale(1f, 1f));
 
@@ -156,7 +156,6 @@ public class GameScreen extends ScreenAdapter {
         engine.addEntity(fgClouds);
         engine.addEntity(whitePuff);
         engine.addEntity(bluePuff);
-
     }
 
     private Entity createScreenWrappedEntity(float xPos,

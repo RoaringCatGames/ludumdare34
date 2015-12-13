@@ -14,6 +14,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ArrayMap;
 import com.roaringcatgames.ld34.ActionProcessor;
 import com.roaringcatgames.ld34.Assets;
+import com.roaringcatgames.ld34.ZUtil;
 import com.roaringcatgames.ld34.components.*;
 
 import javax.xml.crypto.dsig.Transform;
@@ -62,9 +63,6 @@ public class LavaBallEmitterSystem extends IteratingSystem {
 
             }
 
-
-
-
             //Clear all the entities
             emitterMap.get(key).clear();
         }
@@ -101,9 +99,9 @@ public class LavaBallEmitterSystem extends IteratingSystem {
         e.add(TextureComponent.create());
 
         //Vector2 meterSize = RenderingSystem.getScreenSizeInMeters();
-        float xScale = vel.x < 0f ? -1f : 1f;
+        float xScale = vel.x < 0f ? -0.25f : 0.25f;
         e.add(TransformComponent.create()
-                .setPosition(origin.x, origin.y, origin.z)
+                .setPosition(origin.x, origin.y, ZUtil.VolcanoZ + 1f)
                 .setRotation(15f)
                 .setScale(xScale, 1f));
 

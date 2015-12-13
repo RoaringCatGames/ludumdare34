@@ -4,7 +4,6 @@ import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
-import com.badlogic.gdx.Gdx;
 import com.roaringcatgames.ld34.components.*;
 
 /**
@@ -45,10 +44,7 @@ public class ScreenWrapSystem extends IteratingSystem {
             float regionWidthInMeters = txc.region.getRegionWidth()*RenderingSystem.PIXELS_TO_METRES;
             if(vc.speed.x > 0 &&
                tc.position.x - (regionWidthInMeters/2f) > right){
-
-                Gdx.app.log("ScreenWrapSystem", "Initial X Position: " + tc.position.x);
                 tc.position.set(left - regionWidthInMeters / 2f, tc.position.y, tc.position.z);
-                Gdx.app.log("ScreenWrapSystem", "New X Position: " + tc.position.x);
             }else if(
                (vc.speed.x < 0 &&
                (regionWidthInMeters/2f) + tc.position.x < left)){

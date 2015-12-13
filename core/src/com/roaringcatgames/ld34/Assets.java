@@ -22,8 +22,12 @@ public class Assets {
         am.load(LOADING_ATLAS, TEXTURE_ATLAS);
         am.finishLoading();
         am.load(ANI_ATLAS, TEXTURE_ATLAS);
-        am.load(TITLE_SONG, MUSIC);
         am.load(SPRITE_ATLAS, TEXTURE_ATLAS);
+        am.load(TITLE_SONG, MUSIC);
+        am.load(WAVE_ONE_SONG, MUSIC);
+        am.load(SMALL_IMPACT, SOUND);
+        am.load(MED_IMPACT, SOUND);
+        am.load(VOLCANO_RUMBLE, SOUND);
 //        am.load(FONT, BITMAP_FONT);
 
         return am;
@@ -37,10 +41,10 @@ public class Assets {
         return am.get(LOADING_ATLAS, TEXTURE_ATLAS).findRegions("loading");
     }
     public static Array<TextureAtlas.AtlasRegion> getLavaBallFrames(){
-        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("lavaball/lavaball");
+        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("Fireball/Fireball");
     }
     public static Array<TextureAtlas.AtlasRegion> getLavaBallExplodingFrames(){
-        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("lavaball/lavaball");
+        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("Fireball/Fireball");
     }
 
     public static TextureRegion getDirt(){
@@ -88,6 +92,21 @@ public class Assets {
     public static Music getTitleMusic(){
         return am.get(TITLE_SONG, MUSIC);
     }
+    public static Music getWaveOneMuisc(){
+        return am.get(WAVE_ONE_SONG, MUSIC);
+    }
+    public static Sound getSmallImpact(){
+        return am.get(SMALL_IMPACT, SOUND);
+    }
+    public static Sound getMediumImpact(){
+        return am.get(MED_IMPACT, SOUND);
+    }
+    public static Sound getVolcanoRumble(){
+        return am.get(VOLCANO_RUMBLE, SOUND);
+    }
+
+
+
 
     private static Class<TextureAtlas> TEXTURE_ATLAS = TextureAtlas.class;
     private static Class<Music> MUSIC = Music.class;
@@ -97,6 +116,11 @@ public class Assets {
     private static final String FONT = "fonts/courier-new-bold-32.fnt";
     private static final String LOADING_ATLAS = "animations/loading.atlas";
     private static final String ANI_ATLAS = "animations/animations.atlas";
-    private static final String TITLE_SONG = "music/title-music.mp3";
     private static final String SPRITE_ATLAS = "sprites/sprites.atlas";
+
+    private static final String TITLE_SONG = "music/title-music.mp3";
+    private static final String WAVE_ONE_SONG = "music/wave-one-music.mp3";
+    private static final String SMALL_IMPACT = "sfx/small-impact.mp3";
+    private static final String MED_IMPACT = "sfx/medium-impact.mp3";
+    private static final String VOLCANO_RUMBLE = "sfx/volcano-rumble.mp3";
 }

@@ -5,7 +5,9 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.utils.Array;
+import com.roaringcatgames.ld34.ZUtil;
 import com.roaringcatgames.ld34.components.LavaBallComponent;
+import com.roaringcatgames.ld34.components.StateComponent;
 import com.roaringcatgames.ld34.components.TransformComponent;
 import com.roaringcatgames.ld34.components.VelocityComponent;
 
@@ -15,14 +17,13 @@ import com.roaringcatgames.ld34.components.VelocityComponent;
 public class LavaBallSystem extends IteratingSystem {
 
     private float absMaxRotation = 75f;
-    private float maxScale = 2f;
-    private float rotationRate = 90f;
-    private float scaleRate = 1f;
+    private float maxScale = 1f;
+    private float rotationRate = 60f;
+    private float scaleRate = 0.1f;
 
     private Array<Entity> lavaBalls;
     private ComponentMapper<TransformComponent> tm;
     private ComponentMapper<VelocityComponent> vm;
-
 
 
     public LavaBallSystem() {
@@ -46,6 +47,11 @@ public class LavaBallSystem extends IteratingSystem {
         TransformComponent tc = tm.get(entity);
         VelocityComponent vc = vm.get(entity);
 
+        if(vc.speed.y > 0){
+            tc.position.set(tc.position.x, tc.position.y, ZUtil.VolcanoZ + 2f);
+        }else{
+            tc.position.set(tc.position.x, tc.position.y, ZUtil.VolcanoZ - 2f);
+        }
         float currentScale = tc.scale.x;
         float newScale;
         if(currentScale < 0){
@@ -62,6 +68,5 @@ public class LavaBallSystem extends IteratingSystem {
             tc.rotation = Math.max(tc.rotation, -absMaxRotation);
         }
         tc.scale.set(newScale, newScale);
-
     }
 }
