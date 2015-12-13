@@ -64,6 +64,7 @@ public class GameScreen extends ScreenAdapter {
         engine.addSystem(renderingSystem);
 
         addClouds();
+        addGroundEnvironment();
         engine.addEntity(buildBackground());
         engine.addEntity(buildVolcano());
         engine.addEntity(buildLavaBallEmitter(Input.Keys.F, -5f, 5f));
@@ -111,7 +112,7 @@ public class GameScreen extends ScreenAdapter {
 
         Vector2 meterSize = RenderingSystem.getScreenSizeInMeters();
         e.add(TransformComponent.create()
-                .setPosition(meterSize.x/2f, meterSize.y/3f, ZUtil.VolcanoZ)
+                .setPosition(meterSize.x/2f, (meterSize.y/3f) -4f, ZUtil.VolcanoZ)
                 .setRotation(0f)
                 .setScale(1f, 1f));
 
@@ -129,26 +130,54 @@ public class GameScreen extends ScreenAdapter {
         return e;
     }
 
+    private void addGroundEnvironment(){
+        Vector2 meterSize = RenderingSystem.getScreenSizeInMeters();
+
+        Entity dirt = engine.createEntity();
+        dirt.add(TransformComponent.create()
+            .setPosition(meterSize.x/2f, 4f, ZUtil.VolcanoZ + 1f)
+            .setScale(1f, 1f));
+        dirt.add(TextureComponent.create()
+            .setRegion(Assets.getDirt()));
+        engine.addEntity(dirt);
+
+        Entity grassBack = engine.createEntity();
+        grassBack.add(TransformComponent.create()
+                .setPosition(meterSize.x / 2f, 0f, 0f)
+                .setScale(1f, 1f));
+        grassBack.add(TextureComponent.create()
+                .setRegion(Assets.getBackGrass()));
+        engine.addEntity(grassBack);
+
+        Entity grassFront = engine.createEntity();
+        grassFront.add(TransformComponent.create()
+                .setPosition(meterSize.x/2f + 5f, 0f, 0f)
+                .setScale(1f, 1f));
+        grassFront.add(TextureComponent.create()
+                .setRegion(Assets.getFrontGrass()));
+        engine.addEntity(grassFront);
+
+    }
     private void addClouds(){
         Vector2 meterSize = RenderingSystem.getScreenSizeInMeters();
 
-        Entity bgClouds = createScreenWrappedEntity(meterSize.x / 2f, meterSize.y / 3f, 80f,
-                0f, 1f, 1f, Assets.getBackCloudFrames(), 5f);
+        Entity bgClouds = createScreenWrappedEntity(meterSize.x / 2f, meterSize.y / 2f, 80f,
+                    0f, 1f, 1f, Assets.getBackCloudFrames(), 1f);
 
         Entity bmClouds = createScreenWrappedEntity(meterSize.x/2f, meterSize.y/3f, 79f,
-                0f, 1f, 1f, Assets.getMidBackCloudFrames(), 7.5f);
+                0f, 1f, 1f, Assets.getMidBackCloudFrames(), 2f);
 
         Entity fmClouds = createScreenWrappedEntity(meterSize.x/2f, meterSize.y/3f, 78f,
-                0f, 1f, 1f, Assets.getMidFrontCloudFrames(), 10f);
+                0f, 1f, 1f, Assets.getMidFrontCloudFrames(), 3f);
 
         Entity fgClouds = createScreenWrappedEntity(meterSize.x/2f, meterSize.y/3f, 77f,
-                0f, 1f, 1f, Assets.getFrontCloudFrames(), 12.5f);
+                0f, 1f, 1f, Assets.getFrontCloudFrames(), 4f);
 
         Entity whitePuff = createScreenWrappedEntity(meterSize.x / 4f, (meterSize.y / 3f)*2f, 77f,
-                0f, 1f, 1f, Assets.getCloudPuffWhiteFrames(), 6.5f);
+                0f, 1f, 1f, Assets.getCloudPuffWhiteFrames(), 5f);
 
         Entity bluePuff = createScreenWrappedEntity((meterSize.x / 4f) * 3f, (meterSize.y / 3f) * 2f, 77f,
-                0f, 1f, 1f, Assets.getCloudPuffBlueFrames(), 7f);
+                0f, 1f, 1f, Assets.getCloudPuffBlueFrames(), 4f);
 
         engine.addEntity(bgClouds);
         engine.addEntity(bmClouds);

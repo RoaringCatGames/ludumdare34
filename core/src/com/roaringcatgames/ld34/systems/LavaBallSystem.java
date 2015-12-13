@@ -4,10 +4,10 @@ import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 import com.roaringcatgames.ld34.ZUtil;
 import com.roaringcatgames.ld34.components.LavaBallComponent;
-import com.roaringcatgames.ld34.components.StateComponent;
 import com.roaringcatgames.ld34.components.TransformComponent;
 import com.roaringcatgames.ld34.components.VelocityComponent;
 
@@ -47,11 +47,13 @@ public class LavaBallSystem extends IteratingSystem {
         TransformComponent tc = tm.get(entity);
         VelocityComponent vc = vm.get(entity);
 
+        Gdx.app.log("LavaBallSystem", "Speed Y:" + vc.speed.y);
         if(vc.speed.y > 0){
-            tc.position.set(tc.position.x, tc.position.y, ZUtil.VolcanoZ + 2f);
+            tc.position.set(tc.position.x, tc.position.y, ZUtil.FireballBackZ);
         }else{
-            tc.position.set(tc.position.x, tc.position.y, ZUtil.VolcanoZ - 2f);
+            tc.position.set(tc.position.x, tc.position.y, ZUtil.FireballFrontZ);
         }
+        Gdx.app.log("LavaBallSystem", "Position Z: " + tc.position.z);
         float currentScale = tc.scale.x;
         float newScale;
         if(currentScale < 0){

@@ -121,6 +121,6 @@ public class Assets {
     private static final String TITLE_SONG = "music/title-music.mp3";
     private static final String WAVE_ONE_SONG = "music/wave-one-music.mp3";
     private static final String SMALL_IMPACT = "sfx/small-impact.mp3";
-    private static final String MED_IMPACT = "sfx/medium-impact.mp3";
+    private static final String MED_IMPACT = "sfx/med-impact.mp3";
     private static final String VOLCANO_RUMBLE = "sfx/volcano-rumble.mp3";
 }

@@ -3,6 +3,7 @@ package com.roaringcatgames.ld34.systems;
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
+import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.ashley.systems.SortedIteratingSystem;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -17,7 +18,7 @@ import java.util.Comparator;
 /**
  * Created by barry on 12/8/15 @ 9:49 PM.
  */
-public class RenderingSystem extends SortedIteratingSystem {
+public class RenderingSystem extends IteratingSystem {
 
     static final float PPM = 16.0f;
     static final float FRUSTUM_WIDTH = Gdx.graphics.getWidth()/PPM;//37.5f;
@@ -51,12 +52,19 @@ public class RenderingSystem extends SortedIteratingSystem {
     private ComponentMapper<TransformComponent> transformM;
 
     public RenderingSystem(SpriteBatch batch) {
-        super(Family.all(TransformComponent.class, TextureComponent.class).get(), new ZComparator());
+        super(Family.all(TransformComponent.class, TextureComponent.class).get());//, new ZComparator());
 
         textureM = ComponentMapper.getFor(TextureComponent.class);
         transformM = ComponentMapper.getFor(TransformComponent.class);
 
         renderQueue = new Array<Entity>();
+        comparator = new Comparator<Entity>() {
+            @Override
+            public int compare(Entity entityA, Entity entityB) {
+                return (int) Math.signum(transformM.get(entityB).position.z -
+                        transformM.get(entityA).position.z);
+            }
+        };
 
         this.batch = batch;
 
@@ -68,7 +76,7 @@ public class RenderingSystem extends SortedIteratingSystem {
     public void update(float deltaTime) {
         super.update(deltaTime);
 
-        //renderQueue.sort(comparator);
+        renderQueue.sort(comparator);
 
         cam.update();
         batch.setProjectionMatrix(cam.combined);
