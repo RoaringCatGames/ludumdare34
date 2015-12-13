@@ -95,6 +95,33 @@ public class Assets {
         return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("clouds/CloudPuffBlue");
     }
 
+    public static TextureRegion getHoldTextRegion(){
+        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegion("Menu/Hold");
+    }
+
+    public static TextureRegion getReleaseTextRegion(){
+        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegion("Menu/Release");
+    }
+
+    public static Array<TextureAtlas.AtlasRegion> getFireTextFrames(){
+        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("Menu/Fire");
+    }
+    public static Array<TextureAtlas.AtlasRegion> getFFrame(){
+        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("Menu/FStill");
+    }
+    public static Array<TextureAtlas.AtlasRegion> getFDownFrame(){
+        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("Menu/F");
+    }
+
+    public static Array<TextureAtlas.AtlasRegion> getJFrame(){
+        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("Menu/JStill");
+    }
+    public static Array<TextureAtlas.AtlasRegion> getJDownFrame(){
+        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("Menu/J");
+    }
+
+
+
     public static Music getTitleMusic(){
         return am.get(TITLE_SONG, MUSIC);
     }

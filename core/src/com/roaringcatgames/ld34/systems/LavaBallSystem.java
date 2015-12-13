@@ -8,6 +8,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.utils.Array;
 import com.roaringcatgames.ld34.ZUtil;
+import com.roaringcatgames.ld34.components.ArmyUnitComponent;
 import com.roaringcatgames.ld34.components.LavaBallComponent;
 import com.roaringcatgames.ld34.components.TransformComponent;
 import com.roaringcatgames.ld34.components.VelocityComponent;
@@ -29,7 +30,10 @@ public class LavaBallSystem extends IteratingSystem {
 
 
     public LavaBallSystem(Sound lavaHitSound) {
-        super(Family.all(LavaBallComponent.class, VelocityComponent.class, TransformComponent.class).get());
+        super(Family
+                .all(VelocityComponent.class, TransformComponent.class)
+                .one(LavaBallComponent.class, ArmyUnitComponent.class)
+                .get());
         tm = ComponentMapper.getFor(TransformComponent.class);
         vm = ComponentMapper.getFor(VelocityComponent.class);
 
