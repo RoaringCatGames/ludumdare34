@@ -44,10 +44,6 @@ public class GameScreen extends ScreenAdapter {
     private Entity fButton;
     private Entity jButton;
 
-    private boolean isReady = false;
-    private String state = "MENU";
-
-
     public GameScreen(SpriteBatch batch, IScreenDispatcher dispatcher){
         super();
         this.batch = batch;
@@ -76,7 +72,7 @@ public class GameScreen extends ScreenAdapter {
         engine.addSystem(new ArmySpawnerSystem());
         engine.addSystem(new LavaBallEmitterSystem());
         engine.addSystem(new LavaBallSystem(Assets.getMediumImpact()));
-        engine.addSystem(new MenuSystem());
+        engine.addSystem(new MenuSystem(this));
 
         //Rendering system should go last
         engine.addSystem(renderingSystem);
@@ -97,7 +93,21 @@ public class GameScreen extends ScreenAdapter {
         titleMusic.setLooping(true);
         titleMusic.setVolume(1f);
 
-        wave1Music = Assets.getWaveOneMuisc();
+        wave1Music = Assets.getWaveOneMusic();
+        wave1Music.setLooping(true);
+        wave1Music.setVolume(1f);
+
+//        wave2Music = Assets.getWaveTwoMusic();
+//        wave2Music.setLooping(true);
+//        wave2Music.setVolume(1f);
+//
+//        wave3Music = Assets.getWaveThreeMusic();
+//        wave3Music.setLooping(true);
+//        wave3Music.setVolume(1f);
+//
+//        finalMusic = Assets.getEndMusic();
+//        finalMusic.setLooping(true);
+//        finalMusic.setVolume(1f);
 
         isInitialized = true;
     }
@@ -167,14 +177,14 @@ public class GameScreen extends ScreenAdapter {
 
         Vector2 meterSize = RenderingSystem.getScreenSizeInMeters();
         e.add(TransformComponent.create()
-                .setPosition(meterSize.x / 2f, 16f, ZUtil.VolcanoZ)
+                .setPosition(meterSize.x / 2f, 14f, ZUtil.VolcanoZ)
                 .setRotation(0f)
                 .setScale(1f, 1f));
 
         e.add(TextureComponent.create());
         e.add(VolcanoComponent.create());
         e.add(StateComponent.create()
-            .set("DEFAULT"));
+                .set("DEFAULT"));
 
         AnimationComponent a = AnimationComponent.create();
         for(ObjectMap.Entry<String, Array<TextureAtlas.AtlasRegion>> kvp : Assets.getVolcanoStateFrames()){
@@ -192,6 +202,14 @@ public class GameScreen extends ScreenAdapter {
 
     private void addGroundEnvironment(){
         Vector2 meterSize = RenderingSystem.getScreenSizeInMeters();
+
+        Entity trees = engine.createEntity();
+        trees.add(TransformComponent.create()
+                .setPosition(meterSize.x / 2f, 6f, ZUtil.DirtZ)
+                .setScale(1f, 1f));
+        trees.add(TextureComponent.create()
+                .setRegion(Assets.getTreeLine()));
+        engine.addEntity(trees);
 
         Entity dirt = engine.createEntity();
         dirt.add(TransformComponent.create()
@@ -221,34 +239,39 @@ public class GameScreen extends ScreenAdapter {
     private void addClouds(){
         Vector2 meterSize = RenderingSystem.getScreenSizeInMeters();
 
-        engine.addEntity(createScreenWrappedEntity(meterSize.x / 2f, meterSize.y / 2f, 80f,
+        float smallAdjust = 3f/4f;
+        float backAdjust = 1f/2f;
+        float midAdjust = 1f/3f;
+        float frontAdjust = 1f/3f;
+
+        engine.addEntity(createScreenWrappedEntity(meterSize.x / 2f, meterSize.y*backAdjust, 80f,
                 0f, 1f, 1f, Assets.getBackCloudFrames(), 1f));
         engine.addEntity(createScreenWrappedEntity((meterSize.x / 2f) - RenderingSystem.PixelsToMeters(1000f),
-                meterSize.y / 2f, 80f,
+                meterSize.y*backAdjust, 80f,
                 0f, 1f, 1f, Assets.getBackCloudFrames(), 1f));
 
-        engine.addEntity(createScreenWrappedEntity(meterSize.x / 2f, meterSize.y / 3f, 79f,
+        engine.addEntity(createScreenWrappedEntity(meterSize.x / 2f, meterSize.y*midAdjust, 79f,
                 0f, 1f, 1f, Assets.getMidBackCloudFrames(), 2f));
         engine.addEntity(createScreenWrappedEntity((meterSize.x / 2f) - RenderingSystem.PixelsToMeters(1000f),
-                meterSize.y / 3f, 79f,
+                meterSize.y * midAdjust, 79f,
                 0f, 1f, 1f, Assets.getMidBackCloudFrames(), 2f));
 
-        engine.addEntity(createScreenWrappedEntity(meterSize.x / 2f, meterSize.y / 3f, 78f,
+        engine.addEntity(createScreenWrappedEntity(meterSize.x / 2f, meterSize.y * midAdjust, 78f,
                 0f, 1f, 1f, Assets.getMidFrontCloudFrames(), 3f));
         engine.addEntity(createScreenWrappedEntity((meterSize.x / 2f) - RenderingSystem.PixelsToMeters(1000f),
-                meterSize.y / 3f, 78f,
+                meterSize.y * midAdjust, 78f,
                 0f, 1f, 1f, Assets.getMidFrontCloudFrames(), 3f));
 
-        engine.addEntity(createScreenWrappedEntity(meterSize.x / 2f, meterSize.y / 3f, 77f,
+        engine.addEntity(createScreenWrappedEntity(meterSize.x / 2f, meterSize.y * frontAdjust, 77f,
                 0f, 1f, 1f, Assets.getFrontCloudFrames(), 4f));
         engine.addEntity(createScreenWrappedEntity((meterSize.x / 2f) - RenderingSystem.PixelsToMeters(1000f),
-                meterSize.y / 3f, 77f,
+                meterSize.y * frontAdjust, 77f,
                 0f, 1f, 1f, Assets.getFrontCloudFrames(), 4f));
 
-        engine.addEntity(createScreenWrappedEntity(meterSize.x / 4f, (meterSize.y / 3f) * 2f, 77f,
+        engine.addEntity(createScreenWrappedEntity(meterSize.x / 4f, meterSize.y * smallAdjust, 77f,
                 0f, 1f, 1f, Assets.getCloudPuffWhiteFrames(), 5f));
 
-        engine.addEntity(createScreenWrappedEntity((meterSize.x / 4f) * 3f, (meterSize.y / 3f) * 2f, 77f,
+        engine.addEntity(createScreenWrappedEntity((meterSize.x / 4f) * 3f, meterSize.y * smallAdjust, 77f,
                 0f, 1f, 1f, Assets.getCloudPuffBlueFrames(), 4f));
 
     }
@@ -261,6 +284,7 @@ public class GameScreen extends ScreenAdapter {
 
         Vector2 meterSize = RenderingSystem.getScreenSizeInMeters();
         Entity holdText = engine.createEntity();
+        holdText.add(MenuItemComponent.create());
         holdText.add(TextureComponent.create()
                 .setRegion(Assets.getHoldTextRegion()));
         holdText.add(TransformComponent.create()
@@ -269,6 +293,7 @@ public class GameScreen extends ScreenAdapter {
 
 
         Entity releaseText = engine.createEntity();
+        releaseText.add(MenuItemComponent.create());
         releaseText.add(TextureComponent.create()
                 .setRegion(Assets.getReleaseTextRegion()));
         releaseText.add(TransformComponent.create()
@@ -277,6 +302,7 @@ public class GameScreen extends ScreenAdapter {
 
 
         Entity fireText = engine.createEntity();
+        fireText.add(MenuItemComponent.create());
         fireText.add(TextureComponent.create());
         fireText.add(AnimationComponent.create()
                 .addAnimation("DEFAULT", new Animation(1f / 9f, Assets.getFireTextFrames())));
@@ -288,12 +314,13 @@ public class GameScreen extends ScreenAdapter {
         engine.addEntity(fireText);
 
         fButton = engine.createEntity();
+        fButton.add(MenuItemComponent.create());
         fButton.add(TextureComponent.create());
         fButton.add(AnimationComponent.create()
                 .addAnimation("DEFAULT", new Animation(1f, Assets.getFFrame()))
                 .addAnimation("PRESSED", new Animation(1f / 18f, Assets.getFDownFrame())));
         fButton.add(TransformComponent.create()
-                .setPosition(meterSize.x / 3f, meterSize.y * lowAdjust, ZUtil.MenuZ));
+                .setPosition(meterSize.x / 4f, meterSize.y * lowAdjust, ZUtil.MenuZ));
         fButton.add(StateComponent.create()
                 .set("DEFAULT")
                 .setLooping(true));
@@ -302,12 +329,13 @@ public class GameScreen extends ScreenAdapter {
         engine.addEntity(fButton);
 
         jButton = engine.createEntity();
+        jButton.add(MenuItemComponent.create());
         jButton.add(TextureComponent.create());
         jButton.add(AnimationComponent.create()
                 .addAnimation("DEFAULT", new Animation(1f, Assets.getJFrame()))
                 .addAnimation("PRESSED", new Animation(1f / 18f, Assets.getJDownFrame())));
         jButton.add(TransformComponent.create()
-                .setPosition((meterSize.x / 3f) * 2f, meterSize.y * lowAdjust, ZUtil.MenuZ));
+                .setPosition((meterSize.x / 4f) * 3f, meterSize.y * lowAdjust, ZUtil.MenuZ));
         jButton.add(StateComponent.create()
                 .set("DEFAULT")
                 .setLooping(true));
@@ -351,29 +379,20 @@ public class GameScreen extends ScreenAdapter {
         wrc.isActive = !wrc.isActive;
     }
 
-//    private void checkButtonState(Entity button, int key){
-//        StateComponent sc = button.getComponent(StateComponent.class);
-//
-//        if(ActionProcessor.isKeyDown(key) && sc.get() != "PRESSED"){
-//            sc.set("PRESSED");
-//        }else if(ActionProcessor.isKeyJustReleased(key)){
-//            sc.set("DEFAULT");
-//        }
-//    }
+    public void doEvent(String eventName){
+        switch(eventName){
+            case "MENUOVER":
+                //Disable System
+                engine.getSystem(MenuSystem.class).setProcessing(false);
+                titleMusic.stop();
+                wave1Music.play();
+                //StartWave
+                addWaveEmitters();
 
-    private void menuUpdate(float delta){
-
-//        checkButtonState(fButton, Input.Keys.F);
-//        checkButtonState(jButton, Input.Keys.J);
-
-        if(isReady){
-            addWaveEmitters();
+                break;
         }
     }
 
-    private void gameUpdate(float delta){
-
-    }
 
     private void update(float delta){
 
@@ -388,17 +407,6 @@ public class GameScreen extends ScreenAdapter {
 
         if(Gdx.input.isKeyJustPressed(Input.Keys.NUM_3)){
             toggleWaves(wave3Left, wave3Right);
-        }
-
-        switch(state){
-            case "MENU":
-                menuUpdate(delta);
-                break;
-            case "GAME":
-                gameUpdate(delta);
-                break;
-            default:
-                break;
         }
 
         engine.update(delta);

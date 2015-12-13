@@ -22,9 +22,11 @@ import java.security.Key;
  */
 public class MenuSystem extends IteratingSystem {
 
+    private GameScreen game;
     private Array<Entity> buttons;
     private Array<Entity> lavaBalls;
     private Array<Entity> armyUnits;
+    private Array<Entity> menuItems;
 
     private ComponentMapper<StateComponent> sm;
     private ComponentMapper<TransformComponent> tm;
@@ -34,14 +36,15 @@ public class MenuSystem extends IteratingSystem {
     private ComponentMapper<LavaBallComponent> lbm;
     private ComponentMapper<ArmyUnitComponent> aum;
     private ComponentMapper<VelocityComponent> vm;
+    private ComponentMapper<MenuItemComponent> mim;
 
     private int fireballCount = 0;
     private boolean hasGeneratedTargets = false;
 
 
-    public MenuSystem(){
-        super(Family.one(ButtonComponent.class, LavaBallComponent.class, ArmyUnitComponent.class).get());
-
+    public MenuSystem(GameScreen game){
+        super(Family.one(ButtonComponent.class, LavaBallComponent.class, ArmyUnitComponent.class, MenuItemComponent.class).get());
+        this.game = game;
         sm = ComponentMapper.getFor(StateComponent.class);
         tm = ComponentMapper.getFor(TransformComponent.class);
         bm = ComponentMapper.getFor(BoundsComponent.class);
@@ -49,10 +52,12 @@ public class MenuSystem extends IteratingSystem {
         lbm = ComponentMapper.getFor(LavaBallComponent.class);
         aum = ComponentMapper.getFor(ArmyUnitComponent.class);
         vm = ComponentMapper.getFor(VelocityComponent.class);
+        mim = ComponentMapper.getFor(MenuItemComponent.class);
 
         buttons = new Array<>();
         lavaBalls = new Array<>();
         armyUnits = new Array<>();
+        menuItems = new Array<>();
     }
 
     @Override
@@ -64,8 +69,16 @@ public class MenuSystem extends IteratingSystem {
         }
 
         if(hasGeneratedTargets && armyUnits.size == 0){
-            this.setProcessing(false);
+            Gdx.app.log("Menu System", "Menu Items count:" + menuItems.size);
+            for(Entity e:menuItems){
+                TransformComponent tc = tm.get(e);
+                tc.hide();
+            }
+            game.doEvent("MENUOVER");
+
+            return;
         }
+
         for(Entity e:buttons){
             checkButtonState(e);
         }
@@ -95,6 +108,7 @@ public class MenuSystem extends IteratingSystem {
         buttons.clear();
         armyUnits.clear();
         lavaBalls.clear();
+        menuItems.clear();
     }
 
     private void checkButtonState(Entity button){
@@ -109,8 +123,8 @@ public class MenuSystem extends IteratingSystem {
     }
 
     private void generateTargets(){
-        Entity leftUnit = buildUnitComponent(-1.25f, 2.5f, 1f, 10f);
-        Entity rightUnit = buildUnitComponent(61.25f, 2.5f, -1f, -10f);
+        Entity leftUnit = buildUnitComponent(-1.25f, 2.5f, -1f, 10f);
+        Entity rightUnit = buildUnitComponent(61.25f, 2.5f, 1f, -10f);
 
         getEngine().addEntity(leftUnit);
         getEngine().addEntity(rightUnit);
@@ -124,7 +138,7 @@ public class MenuSystem extends IteratingSystem {
         e.add(ArmyUnitComponent.create());
         e.add(TransformComponent.create()
                 .setPosition(x, y, ZUtil.ArmyZ)
-                .setScale(scaleX, 1f));
+                .setScale(2f*scaleX, 2f));
         e.add(AnimationComponent.create()
                 .addAnimation("DEFAULT", new Animation(1f / 10f, Assets.getPikemanFrames())));
         e.add(StateComponent.create()
@@ -141,6 +155,11 @@ public class MenuSystem extends IteratingSystem {
 
     @Override
     protected void processEntity(Entity entity, float deltaTime) {
+
+        MenuItemComponent mic = mim.get(entity);
+        if(mic != null){
+            menuItems.add(entity);
+        }
         ButtonComponent bc = btnm.get(entity);
         if(bc != null){
             buttons.add(entity);
@@ -156,6 +175,10 @@ public class MenuSystem extends IteratingSystem {
         ArmyUnitComponent ac = aum.get(entity);
         if(ac != null){
             armyUnits.add(entity);
+            return;
+        }
+
+        if(mic != null){
             return;
         }
 

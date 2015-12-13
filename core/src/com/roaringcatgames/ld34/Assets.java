@@ -50,6 +50,10 @@ public class Assets {
     public static TextureRegion getDirt(){
         return am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("Dirt");
     }
+    public static TextureRegion getTreeLine(){
+        return am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("Trees");
+    }
+
     public static TextureRegion getBackground(){
         return am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("Background");
     }
@@ -125,7 +129,7 @@ public class Assets {
     public static Music getTitleMusic(){
         return am.get(TITLE_SONG, MUSIC);
     }
-    public static Music getWaveOneMuisc(){
+    public static Music getWaveOneMusic(){
         return am.get(WAVE_ONE_SONG, MUSIC);
     }
     public static Sound getSmallImpact(){

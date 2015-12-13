@@ -45,11 +45,12 @@ public class ArmySpawnerSystem extends IteratingSystem{
 
                 armyItem.add(TransformComponent.create()
                     .setPosition(tc.position.x, tc.position.y, ZUtil.ArmyZ)
-                    .setScale(1f * asc.direction, 1f));
+                    .setScale(2f * -asc.direction, 2f));
                 armyItem.add(AnimationComponent.create()
                     .addAnimation("DEFAULT", new Animation(1f / 10f, Assets.getPikemanFrames())));
                 armyItem.add(StateComponent.create()
-                    .set("DEFAULT"));
+                    .set("DEFAULT")
+                    .setLooping(true));
                 armyItem.add(VelocityComponent.create()
                     .setSpeed(5f * asc.direction, 0f));
                 armyItem.add(KinematicComponent.create());
