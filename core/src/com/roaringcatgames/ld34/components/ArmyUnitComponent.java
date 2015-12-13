@@ -7,7 +7,7 @@ import com.badlogic.ashley.core.Component;
  */
 public class ArmyUnitComponent implements Component {
 
-    public ArmyUnitComponent create(){
+    public static ArmyUnitComponent create(){
         return new ArmyUnitComponent();
     }
 }

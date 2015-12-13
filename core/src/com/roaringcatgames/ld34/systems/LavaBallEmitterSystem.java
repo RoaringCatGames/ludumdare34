@@ -108,6 +108,7 @@ public class LavaBallEmitterSystem extends IteratingSystem {
         e.add(VelocityComponent.create()
                 .setSpeed(vel.x, vel.y));
 
+
         return e;
     }
 }
