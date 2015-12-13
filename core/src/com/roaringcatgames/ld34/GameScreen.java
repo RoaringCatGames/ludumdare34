@@ -41,6 +41,12 @@ public class GameScreen extends ScreenAdapter {
     private Entity wave3Left;
     private Entity wave3Right;
 
+    private Entity fButton;
+    private Entity jButton;
+
+    private boolean isReady = false;
+    private String state = "MENU";
+
 
     public GameScreen(SpriteBatch batch, IScreenDispatcher dispatcher){
         super();
@@ -80,7 +86,8 @@ public class GameScreen extends ScreenAdapter {
         engine.addEntity(buildLavaBallEmitter(Input.Keys.F, -5f, 5f));
         engine.addEntity(buildLavaBallEmitter(Input.Keys.J, 5f, 5f));
 
-        addWaveEmitters();
+
+        addMenu();
 
         titleMusic = Assets.getTitleMusic();
         titleMusic.play();
@@ -112,12 +119,12 @@ public class GameScreen extends ScreenAdapter {
         Entity e = engine.createEntity();
 
         e.add(LavaBallEmitterComponent.create()
-            .setTriggerKey(key)
-            .setEmissionVelocity(xVel, yVel));
+                .setTriggerKey(key)
+                .setEmissionVelocity(xVel, yVel));
 
         Vector2 meterSize = RenderingSystem.getScreenSizeInMeters();
         e.add(TransformComponent.create()
-                .setPosition(meterSize.x/2f, meterSize.y/2f, 1f)
+                .setPosition(meterSize.x / 2f, meterSize.y / 2f, 1f)
                 .setRotation(15f)
                 .setScale(1f, 1f));
 
@@ -155,7 +162,7 @@ public class GameScreen extends ScreenAdapter {
 
         Vector2 meterSize = RenderingSystem.getScreenSizeInMeters();
         e.add(TransformComponent.create()
-                .setPosition(meterSize.x/2f, (meterSize.y/3f), ZUtil.VolcanoZ)
+                .setPosition(meterSize.x / 2f, 16f, ZUtil.VolcanoZ)
                 .setRotation(0f)
                 .setScale(1f, 1f));
 
@@ -183,10 +190,10 @@ public class GameScreen extends ScreenAdapter {
 
         Entity dirt = engine.createEntity();
         dirt.add(TransformComponent.create()
-            .setPosition(meterSize.x / 2f, 6f, ZUtil.DirtZ)
-            .setScale(1f, 1f));
+                .setPosition(meterSize.x / 2f, 6f, ZUtil.DirtZ)
+                .setScale(1f, 1f));
         dirt.add(TextureComponent.create()
-            .setRegion(Assets.getDirt()));
+                .setRegion(Assets.getDirt()));
         engine.addEntity(dirt);
 
         Entity grassBack = engine.createEntity();
@@ -199,7 +206,7 @@ public class GameScreen extends ScreenAdapter {
 
         Entity grassFront = engine.createEntity();
         grassFront.add(TransformComponent.create()
-                .setPosition(meterSize.x/2f + 1f, 0f, 0f)
+                .setPosition(meterSize.x / 2f + 1f, 0f, 0f)
                 .setScale(1f, 1f));
         grassFront.add(TextureComponent.create()
                 .setRegion(Assets.getFrontGrass()));
@@ -211,33 +218,94 @@ public class GameScreen extends ScreenAdapter {
 
         engine.addEntity(createScreenWrappedEntity(meterSize.x / 2f, meterSize.y / 2f, 80f,
                 0f, 1f, 1f, Assets.getBackCloudFrames(), 1f));
-        engine.addEntity(createScreenWrappedEntity((meterSize.x/2f) - RenderingSystem.PixelsToMeters(1000f),
+        engine.addEntity(createScreenWrappedEntity((meterSize.x / 2f) - RenderingSystem.PixelsToMeters(1000f),
                 meterSize.y / 2f, 80f,
                 0f, 1f, 1f, Assets.getBackCloudFrames(), 1f));
 
-        engine.addEntity(createScreenWrappedEntity(meterSize.x/2f, meterSize.y/3f, 79f,
+        engine.addEntity(createScreenWrappedEntity(meterSize.x / 2f, meterSize.y / 3f, 79f,
                 0f, 1f, 1f, Assets.getMidBackCloudFrames(), 2f));
-        engine.addEntity(createScreenWrappedEntity((meterSize.x/2f) - RenderingSystem.PixelsToMeters(1000f),
-                meterSize.y/3f, 79f,
+        engine.addEntity(createScreenWrappedEntity((meterSize.x / 2f) - RenderingSystem.PixelsToMeters(1000f),
+                meterSize.y / 3f, 79f,
                 0f, 1f, 1f, Assets.getMidBackCloudFrames(), 2f));
 
-        engine.addEntity(createScreenWrappedEntity(meterSize.x/2f, meterSize.y/3f, 78f,
+        engine.addEntity(createScreenWrappedEntity(meterSize.x / 2f, meterSize.y / 3f, 78f,
                 0f, 1f, 1f, Assets.getMidFrontCloudFrames(), 3f));
-        engine.addEntity(createScreenWrappedEntity((meterSize.x/2f) - RenderingSystem.PixelsToMeters(1000f),
-                meterSize.y/3f, 78f,
+        engine.addEntity(createScreenWrappedEntity((meterSize.x / 2f) - RenderingSystem.PixelsToMeters(1000f),
+                meterSize.y / 3f, 78f,
                 0f, 1f, 1f, Assets.getMidFrontCloudFrames(), 3f));
 
-        engine.addEntity(createScreenWrappedEntity(meterSize.x/2f, meterSize.y/3f, 77f,
+        engine.addEntity(createScreenWrappedEntity(meterSize.x / 2f, meterSize.y / 3f, 77f,
                 0f, 1f, 1f, Assets.getFrontCloudFrames(), 4f));
-        engine.addEntity(createScreenWrappedEntity((meterSize.x/2f) - RenderingSystem.PixelsToMeters(1000f),
-                meterSize.y/3f, 77f,
+        engine.addEntity(createScreenWrappedEntity((meterSize.x / 2f) - RenderingSystem.PixelsToMeters(1000f),
+                meterSize.y / 3f, 77f,
                 0f, 1f, 1f, Assets.getFrontCloudFrames(), 4f));
 
-        engine.addEntity(createScreenWrappedEntity(meterSize.x / 4f, (meterSize.y / 3f)*2f, 77f,
+        engine.addEntity(createScreenWrappedEntity(meterSize.x / 4f, (meterSize.y / 3f) * 2f, 77f,
                 0f, 1f, 1f, Assets.getCloudPuffWhiteFrames(), 5f));
 
         engine.addEntity(createScreenWrappedEntity((meterSize.x / 4f) * 3f, (meterSize.y / 3f) * 2f, 77f,
                 0f, 1f, 1f, Assets.getCloudPuffBlueFrames(), 4f));
+
+    }
+
+    private void addMenu(){
+
+        float topAdjust = 5f/6f;
+        float midAdjust = 4f/6f;
+        float lowAdjust = 2.75f/6f;
+
+        Vector2 meterSize = RenderingSystem.getScreenSizeInMeters();
+        Entity holdText = engine.createEntity();
+        holdText.add(TextureComponent.create()
+            .setRegion(Assets.getHoldTextRegion()));
+        holdText.add(TransformComponent.create()
+                .setPosition(meterSize.x / 2f, meterSize.y*topAdjust, ZUtil.MenuZ));
+        engine.addEntity(holdText);
+
+
+        Entity releaseText = engine.createEntity();
+        releaseText.add(TextureComponent.create()
+                .setRegion(Assets.getReleaseTextRegion()));
+        releaseText.add(TransformComponent.create()
+                .setPosition(24f, meterSize.y * midAdjust, ZUtil.MenuZ));
+        engine.addEntity(releaseText);
+
+
+        Entity fireText = engine.createEntity();
+        fireText.add(TextureComponent.create());
+        fireText.add(AnimationComponent.create()
+                .addAnimation("DEFAULT", new Animation(1f / 9f, Assets.getFireTextFrames())));
+        fireText.add(TransformComponent.create()
+            .setPosition(42f, meterSize.y * midAdjust, ZUtil.MenuZ));
+        fireText.add(StateComponent.create()
+                .set("DEFAULT")
+                .setLooping(true));
+        engine.addEntity(fireText);
+
+        fButton = engine.createEntity();
+        fButton.add(TextureComponent.create());
+        fButton.add(AnimationComponent.create()
+                .addAnimation("DEFAULT", new Animation(1f, Assets.getFFrame()))
+                .addAnimation("PRESSED", new Animation(1f / 9f, Assets.getFDownFrame())));
+        fButton.add(TransformComponent.create()
+                .setPosition(meterSize.x / 3f, meterSize.y * lowAdjust, ZUtil.MenuZ));
+        fButton.add(StateComponent.create()
+                .set("DEFAULT")
+                .setLooping(true));
+        engine.addEntity(fButton);
+
+        jButton = engine.createEntity();
+        jButton.add(TextureComponent.create());
+        jButton.add(AnimationComponent.create()
+                .addAnimation("DEFAULT", new Animation(1f, Assets.getJFrame()))
+                .addAnimation("PRESSED", new Animation(1f/18f, Assets.getJDownFrame())));
+        jButton.add(TransformComponent.create()
+                .setPosition((meterSize.x/3f)*2f, meterSize.y * lowAdjust, ZUtil.MenuZ));
+        jButton.add(StateComponent.create()
+                .set("DEFAULT")
+                .setLooping(true));
+        engine.addEntity(jButton);
+
 
     }
 
@@ -274,6 +342,30 @@ public class GameScreen extends ScreenAdapter {
         wrc.isActive = !wrc.isActive;
     }
 
+    private void checkButtonState(Entity button, int key){
+        StateComponent sc = button.getComponent(StateComponent.class);
+
+        if(ActionProcessor.isKeyDown(key) && sc.get() != "PRESSED"){
+            sc.set("PRESSED");
+        }else if(ActionProcessor.isKeyJustReleased(key)){
+            sc.set("DEFAULT");
+        }
+    }
+
+    private void menuUpdate(float delta){
+
+        checkButtonState(fButton, Input.Keys.F);
+        checkButtonState(jButton, Input.Keys.J);
+
+        if(isReady){
+            addWaveEmitters();
+        }
+    }
+
+    private void gameUpdate(float delta){
+
+    }
+
     private void update(float delta){
 
         //TODO: Remove:
@@ -287,6 +379,17 @@ public class GameScreen extends ScreenAdapter {
 
         if(Gdx.input.isKeyJustPressed(Input.Keys.NUM_3)){
             toggleWaves(wave3Left, wave3Right);
+        }
+
+        switch(state){
+            case "MENU":
+                menuUpdate(delta);
+                break;
+            case "GAME":
+                gameUpdate(delta);
+                break;
+            default:
+                break;
         }
 
         engine.update(delta);
