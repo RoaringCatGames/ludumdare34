@@ -64,7 +64,9 @@ public class Assets {
     public static ArrayMap<String, Array<TextureAtlas.AtlasRegion>> getVolcanoStateFrames(){
         if(volcanoStateFrames == null){
             volcanoStateFrames = new ArrayMap<>();
-            volcanoStateFrames.put("DEFAULT", am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("volcano/Volcano"));
+            volcanoStateFrames.put("DEFAULT", am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("volcano/VolcanoDefault"));
+            volcanoStateFrames.put("FIRING", am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("volcano/VolcanoFiring"));
+            volcanoStateFrames.put("CHARGING", am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("volcano/VolcanoCharge"));
         }
 
         return volcanoStateFrames;

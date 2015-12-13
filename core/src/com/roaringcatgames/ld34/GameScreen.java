@@ -46,7 +46,7 @@ public class GameScreen extends ScreenAdapter {
         isInitialized = true;
         engine = new PooledEngine();
 
-        Gdx.input.setInputProcessor(new ActionProcessor(Input.Keys.F, Input.Keys.G));
+        Gdx.input.setInputProcessor(new ActionProcessor(Input.Keys.F, Input.Keys.J, Input.Keys.SPACE));
 
         //Rendering system holds our camera so we hold a reference
         //  in case we need to pass it off to another system
@@ -55,11 +55,12 @@ public class GameScreen extends ScreenAdapter {
         engine.addSystem(new CleanUpSystem(new Rectangle(-20f, -20f,
                 renderingSystem.getScreenSizeInMeters().x + 40f, renderingSystem.getScreenSizeInMeters().y + 40f)));
         engine.addSystem(new AnimationSystem());
+        engine.addSystem(new VolcanoSystem(Input.Keys.F, Input.Keys.J));
         engine.addSystem(new GravitySystem(new Vector2(0f, -9.8f)));
         engine.addSystem(new ScreenWrapSystem(0f, 60f));
         engine.addSystem(new MovementSystem());
         engine.addSystem(new LavaBallEmitterSystem());
-        engine.addSystem(new LavaBallSystem());
+        engine.addSystem(new LavaBallSystem(Assets.getMediumImpact()));
         //Rendering system should go last
         engine.addSystem(renderingSystem);
 
@@ -68,7 +69,7 @@ public class GameScreen extends ScreenAdapter {
         engine.addEntity(buildBackground());
         engine.addEntity(buildVolcano());
         engine.addEntity(buildLavaBallEmitter(Input.Keys.F, -5f, 5f));
-        engine.addEntity(buildLavaBallEmitter(Input.Keys.G, 5f, 5f));
+        engine.addEntity(buildLavaBallEmitter(Input.Keys.J, 5f, 5f));
 
         titleMusic = Assets.getTitleMusic();
         titleMusic.play();
@@ -112,18 +113,23 @@ public class GameScreen extends ScreenAdapter {
 
         Vector2 meterSize = RenderingSystem.getScreenSizeInMeters();
         e.add(TransformComponent.create()
-                .setPosition(meterSize.x/2f, (meterSize.y/3f) -4f, ZUtil.VolcanoZ)
+                .setPosition(meterSize.x/2f, (meterSize.y/3f), ZUtil.VolcanoZ)
                 .setRotation(0f)
                 .setScale(1f, 1f));
 
         e.add(TextureComponent.create());
-
+        e.add(VolcanoComponent.create());
         e.add(StateComponent.create()
             .set("DEFAULT"));
 
         AnimationComponent a = AnimationComponent.create();
         for(ObjectMap.Entry<String, Array<TextureAtlas.AtlasRegion>> kvp : Assets.getVolcanoStateFrames()){
-                a.addAnimation(kvp.key, new Animation(1f/3f, kvp.value, Animation.PlayMode.LOOP));
+
+            float frameTime = 1f/8f;
+            if(kvp.key == "CHARGING"){
+                frameTime = 1f/16f;
+            }
+            a.addAnimation(kvp.key, new Animation(frameTime, kvp.value, Animation.PlayMode.LOOP));
         }
         e.add(a);
 
@@ -135,7 +141,7 @@ public class GameScreen extends ScreenAdapter {
 
         Entity dirt = engine.createEntity();
         dirt.add(TransformComponent.create()
-            .setPosition(meterSize.x/2f, 4f, ZUtil.VolcanoZ + 1f)
+            .setPosition(meterSize.x/2f, 6f, ZUtil.DirtZ)
             .setScale(1f, 1f));
         dirt.add(TextureComponent.create()
             .setRegion(Assets.getDirt()));
@@ -151,7 +157,7 @@ public class GameScreen extends ScreenAdapter {
 
         Entity grassFront = engine.createEntity();
         grassFront.add(TransformComponent.create()
-                .setPosition(meterSize.x/2f + 5f, 0f, 0f)
+                .setPosition(meterSize.x/2f + 1f, 0f, 0f)
                 .setScale(1f, 1f));
         grassFront.add(TextureComponent.create()
                 .setRegion(Assets.getFrontGrass()));
