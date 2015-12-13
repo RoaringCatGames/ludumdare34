@@ -80,6 +80,13 @@ public class Assets {
         return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("army/pikeman");
     }
 
+    public static Array<TextureAtlas.AtlasRegion> getHorsemanFrames(){
+        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("army/Horseman");
+    }
+    public static Array<TextureAtlas.AtlasRegion> getHitMeBubbleFrames(){
+        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("army/Bubble");
+    }
+
     public static Array<TextureAtlas.AtlasRegion> getBackCloudFrames(){
         return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("clouds/CloudBack");
     }

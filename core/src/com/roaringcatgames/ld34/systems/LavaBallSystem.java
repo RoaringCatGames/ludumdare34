@@ -52,7 +52,6 @@ public class LavaBallSystem extends IteratingSystem {
             BoundsComponent bc = bm.get(unit);
             for(Entity lava:lavaBalls) {
                 TransformComponent tc = tm.get(lava);
-                Gdx.app.log("LavaBallSystem", "Bound:" + bc.bounds.x + " " + bc.bounds.y);
                 if (bc.bounds.contains(tc.position.x, tc.position.y)){
                     getEngine().removeEntity(unit);
                 }

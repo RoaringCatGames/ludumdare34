@@ -14,6 +14,7 @@ import com.roaringcatgames.ld34.Assets;
 import com.roaringcatgames.ld34.GameScreen;
 import com.roaringcatgames.ld34.ZUtil;
 import com.roaringcatgames.ld34.components.*;
+import com.sun.glass.ui.Menu;
 
 import java.security.Key;
 
@@ -40,6 +41,9 @@ public class MenuSystem extends IteratingSystem {
 
     private int fireballCount = 0;
     private boolean hasGeneratedTargets = false;
+
+    Entity leftBubble;
+    Entity rightBubble;
 
 
     public MenuSystem(GameScreen game){
@@ -88,8 +92,34 @@ public class MenuSystem extends IteratingSystem {
             TransformComponent tc = tm.get(e);
             VelocityComponent vc = vm.get(e);
             BoundsComponent bc = bm.get(e);
+            ArmyUnitComponent ac = aum.get(e);
+
             if(vc.speed.x > 0 && tc.position.x >= 10f ||
                     vc.speed.x < 0 && tc.position.x <= 50f){
+
+
+                if(!ac.isSpeaking){
+
+                    Entity bubble = ((PooledEngine)getEngine()).createEntity();
+                    bubble.add(MenuItemComponent.create());
+                    bubble.add(TextureComponent.create());
+                    bubble.add(AnimationComponent.create()
+                        .addAnimation("DEFAULT", new Animation(1f / 9f, Assets.getHitMeBubbleFrames())));
+                    bubble.add(StateComponent.create()
+                            .set("DEFAULT")
+                        .setLooping(true));
+                    bubble.add(TransformComponent.create()
+                        .setPosition(tc.position.x, tc.position.y + 4f, tc.position.z));
+
+                    getEngine().addEntity(bubble);
+                    ac.isSpeaking = true;
+                    if(vc.speed.x > 0){
+                        leftBubble = bubble;
+                    }else{
+                        rightBubble = bubble;
+                    }
+                }
+
                 vc.setSpeed(0f, 0f);
             }
 
@@ -97,6 +127,12 @@ public class MenuSystem extends IteratingSystem {
                 TransformComponent lc = tm.get(lava);
                 if(bc.bounds.contains(lc.position.x, lc.position.y)){
                     getEngine().removeEntity(e);
+
+                    if(ac.unitType == "pike"){
+                        getEngine().removeEntity(leftBubble);
+                    }else{
+                        getEngine().removeEntity(rightBubble);
+                    }
                 }
             }
         }
@@ -123,8 +159,8 @@ public class MenuSystem extends IteratingSystem {
     }
 
     private void generateTargets(){
-        Entity leftUnit = buildUnitComponent(-1.25f, 2.5f, -1f, 10f);
-        Entity rightUnit = buildUnitComponent(61.25f, 2.5f, 1f, -10f);
+        Entity leftUnit = buildUnitComponent(-1.25f, 2.5f, -1f, 10f, false);
+        Entity rightUnit = buildUnitComponent(61.25f, 2.5f, 1f, -10f, true);
 
         getEngine().addEntity(leftUnit);
         getEngine().addEntity(rightUnit);
@@ -132,15 +168,23 @@ public class MenuSystem extends IteratingSystem {
         hasGeneratedTargets = true;
     }
 
-    private Entity buildUnitComponent(float x, float y, float scaleX, float xSpeed) {
+    private Entity buildUnitComponent(float x, float y, float scaleX, float xSpeed, boolean isHorse) {
         Entity e = ((PooledEngine)getEngine()).createEntity();
         e.add(TextureComponent.create());
-        e.add(ArmyUnitComponent.create());
+        String unitType = isHorse ? "horse" : "pike";
+        e.add(ArmyUnitComponent.create()
+            .setUnitType(unitType));
         e.add(TransformComponent.create()
                 .setPosition(x, y, ZUtil.ArmyZ)
-                .setScale(2f*scaleX, 2f));
-        e.add(AnimationComponent.create()
-                .addAnimation("DEFAULT", new Animation(1f / 10f, Assets.getPikemanFrames())));
+                .setScale(2f * scaleX, 2f));
+        if(isHorse) {
+            e.add(AnimationComponent.create()
+                    .addAnimation("DEFAULT", new Animation(1f / 10f, Assets.getHorsemanFrames())));
+        }else{
+            e.add(AnimationComponent.create()
+                    .addAnimation("DEFAULT", new Animation(1f / 10f, Assets.getPikemanFrames())));
+        }
+
         e.add(StateComponent.create()
                 .set("DEFAULT")
                 .setLooping(true));
