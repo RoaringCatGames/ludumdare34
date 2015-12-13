@@ -56,6 +56,12 @@ public class ArmySpawnerSystem extends IteratingSystem{
                 armyItem.add(BoundsComponent.create()
                     .setBounds(0f, 0f, 3f, 3f));
 
+                armyItem.add(DamageComponent.create()
+                    .setDPS(1f));
+                armyItem.add(HealthComponent.create()
+                    .setHealth(2f)
+                    .setMaxHealth(2f));
+
                 armyItem.add(KinematicComponent.create());
 
                 getEngine().addEntity(armyItem);

@@ -81,6 +81,7 @@ public class GameScreen extends ScreenAdapter {
 
         //Rendering system should go last
         engine.addSystem(renderingSystem);
+        engine.addSystem(new HealthRenderSystem(renderingSystem.getCamera()));
         engine.addSystem(new DebugSystem(batch, engine, renderingSystem.getCamera()));
 
         addClouds();
@@ -255,6 +256,11 @@ public class GameScreen extends ScreenAdapter {
             .setLooping(false));
         bld.add(BoundsComponent.create()
             .setBounds(0f, 0f, boundW, boundH));
+        bld.add(HealthComponent.create()
+            .setMaxHealth(5f)
+            .setHealth(5f));
+        bld.add(DamageComponent.create()
+            .setDPS(0.25f));
         engine.addEntity(bld);
     }
 
