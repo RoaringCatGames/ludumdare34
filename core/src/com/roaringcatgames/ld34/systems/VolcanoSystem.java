@@ -52,10 +52,13 @@ public class VolcanoSystem extends IteratingSystem {
             if (isFiring && sc.get() != "FIRING") {
                 sc.set("FIRING");
                 sc.setLooping(false);
-            }else if(isCharging && sc.get() != "CHARGING"){
+            }else if(isCharging && sc.get() != "CHARGING" &&
+                    (sc.get() != "FIRING" ||
+                    ac.animations.get(sc.get()).isAnimationFinished(sc.time))){
                 sc.set("CHARGING");
                 sc.setLooping(true);
-            }else if(!isCharging && !isFiring && ac.animations.get(sc.get()).isAnimationFinished(sc.time)){
+            }else if(!isCharging && !isFiring &&
+                    ac.animations.get(sc.get()).isAnimationFinished(sc.time)){
                 sc.set("DEFAULT");
                 sc.setLooping(true);
             }

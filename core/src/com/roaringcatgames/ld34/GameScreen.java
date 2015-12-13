@@ -46,7 +46,7 @@ public class GameScreen extends ScreenAdapter {
         isInitialized = true;
         engine = new PooledEngine();
 
-        Gdx.input.setInputProcessor(new ActionProcessor(Input.Keys.F, Input.Keys.G));
+        Gdx.input.setInputProcessor(new ActionProcessor(Input.Keys.F, Input.Keys.J, Input.Keys.SPACE));
 
         //Rendering system holds our camera so we hold a reference
         //  in case we need to pass it off to another system
@@ -55,7 +55,7 @@ public class GameScreen extends ScreenAdapter {
         engine.addSystem(new CleanUpSystem(new Rectangle(-20f, -20f,
                 renderingSystem.getScreenSizeInMeters().x + 40f, renderingSystem.getScreenSizeInMeters().y + 40f)));
         engine.addSystem(new AnimationSystem());
-        engine.addSystem(new VolcanoSystem(Input.Keys.F, Input.Keys.G));
+        engine.addSystem(new VolcanoSystem(Input.Keys.F, Input.Keys.J));
         engine.addSystem(new GravitySystem(new Vector2(0f, -9.8f)));
         engine.addSystem(new ScreenWrapSystem(0f, 60f));
         engine.addSystem(new MovementSystem());
@@ -69,7 +69,7 @@ public class GameScreen extends ScreenAdapter {
         engine.addEntity(buildBackground());
         engine.addEntity(buildVolcano());
         engine.addEntity(buildLavaBallEmitter(Input.Keys.F, -5f, 5f));
-        engine.addEntity(buildLavaBallEmitter(Input.Keys.G, 5f, 5f));
+        engine.addEntity(buildLavaBallEmitter(Input.Keys.J, 5f, 5f));
 
         titleMusic = Assets.getTitleMusic();
         titleMusic.play();
@@ -125,7 +125,7 @@ public class GameScreen extends ScreenAdapter {
         AnimationComponent a = AnimationComponent.create();
         for(ObjectMap.Entry<String, Array<TextureAtlas.AtlasRegion>> kvp : Assets.getVolcanoStateFrames()){
 
-            float frameTime = 1f/10f;
+            float frameTime = 1f/8f;
             if(kvp.key == "CHARGING"){
                 frameTime = 1f/16f;
             }
