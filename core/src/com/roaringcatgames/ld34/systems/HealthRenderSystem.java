@@ -43,15 +43,20 @@ public class HealthRenderSystem extends IteratingSystem {
         Gdx.gl20.glLineWidth(0.5f);
         filledRenderer.setProjectionMatrix(cam.combined);
         filledRenderer.begin(ShapeRenderer.ShapeType.Filled);
-        filledRenderer.setColor(Color.YELLOW);
-
-
+        filledRenderer.setColor(Color.GREEN);
 
         for(Entity entity:healths) {
             BoundsComponent bc = bm.get(entity);
             HealthComponent hc = hm.get(entity);
 
             float healthWidth = bc.bounds.width * (hc.health/hc.maxHealth);
+            if(healthWidth < 0.75f){
+                filledRenderer.setColor(Color.YELLOW);
+            }else if(healthWidth < 0.5f){
+                filledRenderer.setColor(Color.RED);
+            }else{
+                filledRenderer.setColor(Color.GREEN);
+            }
             filledRenderer.rect(bc.bounds.x, bc.bounds.y + bc.bounds.height + 0.25f,
                     healthWidth, 0.25f);
         }
