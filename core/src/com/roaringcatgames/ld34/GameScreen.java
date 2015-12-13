@@ -9,6 +9,7 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
@@ -130,76 +131,24 @@ public class GameScreen extends ScreenAdapter {
 
     private void addClouds(){
         Vector2 meterSize = RenderingSystem.getScreenSizeInMeters();
-        Entity bgClouds = engine.createEntity();
-        bgClouds.add(TransformComponent.create()
-                .setPosition(meterSize.x/2f, meterSize.y/3f, 80f)
-                .setRotation(0f)
-                .setScale(1f, 1f));
-        bgClouds.add(TextureComponent.create());
-        bgClouds.add(AnimationComponent.create()
-            .addAnimation("DEFAULT", new Animation(1f, Assets.getBackCloudFrames())));
-        bgClouds.add(StateComponent.create()
-            .set("DEFAULT"));
 
-        Entity bmClouds = engine.createEntity();
-        bmClouds.add(TransformComponent.create()
-                .setPosition(meterSize.x/2f, meterSize.y/3f, 79f)
-                .setRotation(0f)
-                .setScale(1f, 1f));
-        bmClouds.add(TextureComponent.create());
-        bmClouds.add(AnimationComponent.create()
-                .addAnimation("DEFAULT", new Animation(1f, Assets.getMidBackCloudFrames())));
-        bmClouds.add(StateComponent.create()
-                .set("DEFAULT"));
-        bmClouds.add(ScreenWrapComponent.create());
+        Entity bgClouds = createScreenWrappedEntity(meterSize.x / 2f, meterSize.y / 3f, 80f,
+                0f, 1f, 1f, Assets.getBackCloudFrames(), 5f);
 
-        Entity fmClouds = engine.createEntity();
-        fmClouds.add(TransformComponent.create()
-                .setPosition(meterSize.x/2f, meterSize.y/3f, 78f)
-                .setRotation(0f)
-                .setScale(1f, 1f));
-        fmClouds.add(TextureComponent.create());
-        fmClouds.add(AnimationComponent.create()
-                .addAnimation("DEFAULT", new Animation(1f, Assets.getMidFrontCloudFrames())));
-        fmClouds.add(StateComponent.create()
-                .set("DEFAULT"));
-        fmClouds.add(ScreenWrapComponent.create());
+        Entity bmClouds = createScreenWrappedEntity(meterSize.x/2f, meterSize.y/3f, 79f,
+                0f, 1f, 1f, Assets.getMidBackCloudFrames(), 7.5f);
 
-        Entity fgClouds = engine.createEntity();
-        fgClouds.add(TransformComponent.create()
-                .setPosition(meterSize.x/2f, meterSize.y/3f, 77f)
-                .setRotation(0f)
-                .setScale(1f, 1f));
-        fgClouds.add(TextureComponent.create());
-        fgClouds.add(AnimationComponent.create()
-                .addAnimation("DEFAULT", new Animation(1f, Assets.getFrontCloudFrames())));
-        fgClouds.add(StateComponent.create()
-                .set("DEFAULT"));
-        fgClouds.add(ScreenWrapComponent.create());
+        Entity fmClouds = createScreenWrappedEntity(meterSize.x/2f, meterSize.y/3f, 78f,
+                0f, 1f, 1f, Assets.getMidFrontCloudFrames(), 10f);
 
-        Entity whitePuff = engine.createEntity();
-        whitePuff.add(TransformComponent.create()
-                .setPosition(meterSize.x/4f, (meterSize.y/3f)*2f, 76f)
-                .setRotation(0f)
-                .setScale(1f, 1f));
-        whitePuff.add(TextureComponent.create());
-        whitePuff.add(AnimationComponent.create()
-                .addAnimation("DEFAULT", new Animation(1f, Assets.getCloudPuffWhiteFrames())));
-        whitePuff.add(StateComponent.create()
-                .set("DEFAULT"));
-        whitePuff.add(ScreenWrapComponent.create());
+        Entity fgClouds = createScreenWrappedEntity(meterSize.x/2f, meterSize.y/3f, 77f,
+                0f, 1f, 1f, Assets.getFrontCloudFrames(), 12.5f);
 
-        Entity bluePuff = engine.createEntity();
-        bluePuff.add(TransformComponent.create()
-                .setPosition((meterSize.x / 4f) * 3f, (meterSize.y / 3f) * 2f, 76f)
-                .setRotation(0f)
-                .setScale(1f, 1f));
-        bluePuff.add(TextureComponent.create());
-        bluePuff.add(AnimationComponent.create()
-                .addAnimation("DEFAULT", new Animation(1f, Assets.getCloudPuffBlueFrames())));
-        bluePuff.add(StateComponent.create()
-                .set("DEFAULT"));
-        bluePuff.add(ScreenWrapComponent.create());
+        Entity whitePuff = createScreenWrappedEntity(meterSize.x / 4f, (meterSize.y / 3f)*2f, 77f,
+                0f, 1f, 1f, Assets.getCloudPuffWhiteFrames(), 6.5f);
+
+        Entity bluePuff = createScreenWrappedEntity((meterSize.x / 4f) * 3f, (meterSize.y / 3f) * 2f, 77f,
+                0f, 1f, 1f, Assets.getCloudPuffBlueFrames(), 7f);
 
         engine.addEntity(bgClouds);
         engine.addEntity(bmClouds);
@@ -208,6 +157,32 @@ public class GameScreen extends ScreenAdapter {
         engine.addEntity(whitePuff);
         engine.addEntity(bluePuff);
 
+    }
+
+    private Entity createScreenWrappedEntity(float xPos,
+                                           float yPos,
+                                           float zPos,
+                                           float rotation,
+                                           float scale,
+                                           float aniRate,
+                                           Array<TextureAtlas.AtlasRegion> defaultAnimation,
+                                           float xSpeed) {
+        Entity entity = engine.createEntity();
+        entity.add(TransformComponent.create()
+                .setPosition(xPos, yPos, zPos)
+                .setRotation(rotation)
+                .setScale(scale, scale));
+        entity.add(TextureComponent.create());
+        entity.add(AnimationComponent.create()
+                .addAnimation("DEFAULT", new Animation(aniRate, defaultAnimation)));
+        entity.add(StateComponent.create()
+                .set("DEFAULT"));
+        entity.add(ScreenWrapComponent.create());
+        entity.add(VelocityComponent.create()
+            .setSpeed(xSpeed, 0f));
+        entity.add(KinematicComponent.create());
+
+        return entity;
     }
 
 

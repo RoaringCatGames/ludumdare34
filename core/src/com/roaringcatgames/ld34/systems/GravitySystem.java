@@ -6,6 +6,7 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
+import com.roaringcatgames.ld34.components.KinematicComponent;
 import com.roaringcatgames.ld34.components.VelocityComponent;
 
 /**
@@ -19,7 +20,8 @@ public class GravitySystem extends IteratingSystem {
     private ComponentMapper<VelocityComponent> vm;
 
     public GravitySystem(Vector2 gravity){
-        super(Family.all(VelocityComponent.class).get());
+        super(Family.all(VelocityComponent.class)
+                .exclude(KinematicComponent.class).get());
         if(gravity == null){
             throw new IllegalArgumentException("Gravity System must have a non-null gravity");
         }

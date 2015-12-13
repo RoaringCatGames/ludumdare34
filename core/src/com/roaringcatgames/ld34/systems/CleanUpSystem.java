@@ -7,6 +7,7 @@ import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Rectangle;
 import com.roaringcatgames.ld34.components.BoundsComponent;
+import com.roaringcatgames.ld34.components.ScreenWrapComponent;
 import com.roaringcatgames.ld34.components.TransformComponent;
 
 /**
@@ -18,7 +19,8 @@ public class CleanUpSystem extends IteratingSystem {
     private ComponentMapper<TransformComponent> tm;
 
     public CleanUpSystem(Rectangle bounds) {
-        super(Family.all(TransformComponent.class).get());
+        super(Family.all(TransformComponent.class)
+                .exclude(ScreenWrapComponent.class).get());
         tm = ComponentMapper.getFor(TransformComponent.class);
         this.bounds = bounds;
     }
