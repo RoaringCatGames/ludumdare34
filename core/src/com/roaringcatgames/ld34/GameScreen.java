@@ -120,14 +120,15 @@ public class GameScreen extends ScreenAdapter {
 
     private void addWaveEmitters() {
         Vector2 meterSize = RenderingSystem.getScreenSizeInMeters();
-        wave1Left = buildArmyEmitter(1, -3.75f, 5f, 3f, true);
-        wave1Right = buildArmyEmitter(-1, meterSize.x+3.75f, 2.5f, 3f, true);
+        float armyEmitterHeight = 6f;
+        wave1Left = buildArmyEmitter(1, -3.75f, armyEmitterHeight, 3f, true);
+        wave1Right = buildArmyEmitter(-1, meterSize.x+3.75f, armyEmitterHeight, 3f, true);
 
         wave2Left = buildArmyEmitter(1, -2.5f, 5f, 2.5f, false);
-        wave2Right = buildArmyEmitter(-1, meterSize.x+2.5f, 2.5f, 2.5f, false);
+        wave2Right = buildArmyEmitter(-1, meterSize.x+2.5f, armyEmitterHeight, 2.5f, false);
 
         wave3Left = buildArmyEmitter(1, -1.25f, 5f, 2f, false);
-        wave3Right = buildArmyEmitter(-1, meterSize.x+1.5f, 5f, 2f, false);
+        wave3Right = buildArmyEmitter(-1, meterSize.x+1.5f, armyEmitterHeight, 2f, false);
 
         engine.addEntity(wave1Left);
         engine.addEntity(wave1Right);
