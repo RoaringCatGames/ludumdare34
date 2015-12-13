@@ -25,6 +25,8 @@ public class Assets {
         am.load(SPRITE_ATLAS, TEXTURE_ATLAS);
         am.load(TITLE_SONG, MUSIC);
         am.load(WAVE_ONE_SONG, MUSIC);
+        am.load(WAVE_TWO_SONG, MUSIC);
+        am.load(WAVE_THREE_SONG, MUSIC);
         am.load(SMALL_IMPACT, SOUND);
         am.load(MED_IMPACT, SOUND);
         am.load(VOLCANO_RUMBLE, SOUND);
@@ -80,6 +82,13 @@ public class Assets {
         return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("army/pikeman");
     }
 
+    public static Array<TextureAtlas.AtlasRegion> getHorsemanFrames(){
+        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("army/Horseman");
+    }
+    public static Array<TextureAtlas.AtlasRegion> getHitMeBubbleFrames(){
+        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("army/Bubble");
+    }
+
     public static Array<TextureAtlas.AtlasRegion> getBackCloudFrames(){
         return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("clouds/CloudBack");
     }
@@ -125,6 +134,29 @@ public class Assets {
     }
 
 
+    public static Array<TextureAtlas.AtlasRegion> getBuildingAFrames(){
+        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("Buildings/Building_A");
+    }
+    public static Array<TextureAtlas.AtlasRegion> getBuildingBFrames(){
+        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("Buildings/Building_B");
+    }
+    public static Array<TextureAtlas.AtlasRegion> getBuildingCFrames(){
+        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("Buildings/Building_C");
+    }
+    public static Array<TextureAtlas.AtlasRegion> getBuildingDFrames(){
+        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("Buildings/Building_D");
+    }
+    public static Array<TextureAtlas.AtlasRegion> getBuildingEFrames(){
+        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("Buildings/Building_E");
+    }
+    public static Array<TextureAtlas.AtlasRegion> getBuildingFFrames(){
+        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("Buildings/Building_F");
+    }
+    public static Array<TextureAtlas.AtlasRegion> getWallFrames(){
+        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("Buildings/Wall");
+    }
+
+
 
     public static Music getTitleMusic(){
         return am.get(TITLE_SONG, MUSIC);
@@ -132,6 +164,13 @@ public class Assets {
     public static Music getWaveOneMusic(){
         return am.get(WAVE_ONE_SONG, MUSIC);
     }
+    public static Music getWaveTwoMusic(){
+        return am.get(WAVE_TWO_SONG, MUSIC);
+    }
+    public static Music getWaveThreeMusic(){
+        return am.get(WAVE_THREE_SONG, MUSIC);
+    }
+
     public static Sound getSmallImpact(){
         return am.get(SMALL_IMPACT, SOUND);
     }
@@ -157,6 +196,8 @@ public class Assets {
 
     private static final String TITLE_SONG = "music/title-music.mp3";
     private static final String WAVE_ONE_SONG = "music/wave-one-music.mp3";
+    private static final String WAVE_TWO_SONG = "music/wave-two-music.mp3";
+    private static final String WAVE_THREE_SONG = "music/wave-three-music.mp3";
     private static final String SMALL_IMPACT = "sfx/small-impact.mp3";
     private static final String MED_IMPACT = "sfx/med-impact.mp3";
     private static final String VOLCANO_RUMBLE = "sfx/volcano-rumble.mp3";

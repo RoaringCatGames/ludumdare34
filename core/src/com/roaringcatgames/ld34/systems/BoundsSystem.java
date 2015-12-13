@@ -27,7 +27,10 @@ public class BoundsSystem extends IteratingSystem {
         TransformComponent tfm = tm.get(entity);
         BoundsComponent bounds = bm.get(entity);
 
-        bounds.bounds.x = tfm.position.x - bounds.bounds.width * 0.5f + bounds.offset.x;
-        bounds.bounds.y = tfm.position.y - bounds.bounds.height * 0.5f + bounds.offset.x;
+        float xOffsetAdjust = tfm.scale.x >= 0f ? 1f : -1f;
+        float yOffsetAdjust = tfm.scale.y >= 0f ? 1f : -1f;
+
+        bounds.bounds.x = tfm.position.x - bounds.bounds.width * 0.5f + (bounds.offset.x*xOffsetAdjust);
+        bounds.bounds.y = tfm.position.y - bounds.bounds.height * 0.5f + (bounds.offset.y*yOffsetAdjust);
     }
 }

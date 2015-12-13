@@ -7,7 +7,14 @@ import com.badlogic.ashley.core.Component;
  */
 public class ArmyUnitComponent implements Component {
 
+    public boolean isSpeaking = false;
+    public String unitType = "pike";
     public static ArmyUnitComponent create(){
         return new ArmyUnitComponent();
+    }
+
+    public ArmyUnitComponent setUnitType(String unitType){
+        this.unitType = unitType;
+        return this;
     }
 }

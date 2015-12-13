@@ -8,7 +8,7 @@
 	<inherits name='libgdx-utils-box2d' />
 	<inherits name='libgdx-utils' />
 
-	<inherits name='BrownieBouncer' />
+	<inherits name='VolcanoGame' />
 	<entry-point class='com.roaringcatgames.ld34.client.HtmlLauncher' />
 	
 	<set-configuration-property name="gdx.assetpath" value="../android/assets" />

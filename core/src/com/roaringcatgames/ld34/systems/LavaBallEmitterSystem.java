@@ -5,9 +5,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.ashley.systems.IteratingSystem;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
@@ -16,8 +14,6 @@ import com.roaringcatgames.ld34.ActionProcessor;
 import com.roaringcatgames.ld34.Assets;
 import com.roaringcatgames.ld34.ZUtil;
 import com.roaringcatgames.ld34.components.*;
-
-import javax.xml.crypto.dsig.Transform;
 
 /**
  * Created by barry on 12/12/15 @ 12:09 PM.
@@ -98,7 +94,6 @@ public class LavaBallEmitterSystem extends IteratingSystem {
 
         e.add(TextureComponent.create());
 
-        //Vector2 meterSize = RenderingSystem.getScreenSizeInMeters();
         float xScale = vel.x < 0f ? -0.25f : 0.25f;
         e.add(TransformComponent.create()
                 .setPosition(origin.x, origin.y, ZUtil.VolcanoZ + 1f)
@@ -108,6 +103,8 @@ public class LavaBallEmitterSystem extends IteratingSystem {
         e.add(VelocityComponent.create()
                 .setSpeed(vel.x, vel.y));
 
+        e.add(BoundsComponent.create()
+            .setBounds(0f, 0f, 3f, 3f));
 
         return e;
     }
