@@ -16,6 +16,8 @@ import com.badlogic.gdx.utils.ObjectMap;
 import com.roaringcatgames.ld34.components.*;
 import com.roaringcatgames.ld34.systems.*;
 
+import java.util.Random;
+
 /**
  * Created by barry on 12/9/15 @ 11:12 PM.
  */
@@ -44,6 +46,8 @@ public class GameScreen extends ScreenAdapter {
     private Entity fButton;
     private Entity jButton;
 
+    private float minXFirballForce = 6f;
+
     public GameScreen(SpriteBatch batch, IScreenDispatcher dispatcher){
         super();
         this.batch = batch;
@@ -70,6 +74,7 @@ public class GameScreen extends ScreenAdapter {
         engine.addSystem(new MovementSystem());
         engine.addSystem(new BoundsSystem());
         engine.addSystem(new ArmySpawnerSystem());
+        //engine.addSystem(new ArmyUnitSystem(this));
         engine.addSystem(new LavaBallEmitterSystem());
         engine.addSystem(new LavaBallSystem(Assets.getMediumImpact()));
         engine.addSystem(new MenuSystem(this));
@@ -82,11 +87,12 @@ public class GameScreen extends ScreenAdapter {
         addGroundEnvironment();
         engine.addEntity(buildBackground());
         engine.addEntity(buildVolcano());
-        engine.addEntity(buildLavaBallEmitter(Input.Keys.F, -5f, 5f));
-        engine.addEntity(buildLavaBallEmitter(Input.Keys.J, 5f, 5f));
+        engine.addEntity(buildLavaBallEmitter(Input.Keys.F, -minXFirballForce, 5f));
+        engine.addEntity(buildLavaBallEmitter(Input.Keys.J, minXFirballForce, 5f));
 
 
         addMenu();
+        addInitalBuildings();
 
         titleMusic = Assets.getTitleMusic();
         titleMusic.play();
@@ -114,14 +120,14 @@ public class GameScreen extends ScreenAdapter {
 
     private void addWaveEmitters() {
         Vector2 meterSize = RenderingSystem.getScreenSizeInMeters();
-        wave1Left = buildArmyEmitter(1, -3.75f, 2.5f, 3f, true);
+        wave1Left = buildArmyEmitter(1, -3.75f, 5f, 3f, true);
         wave1Right = buildArmyEmitter(-1, meterSize.x+3.75f, 2.5f, 3f, true);
 
-        wave2Left = buildArmyEmitter(1, -2.5f, 2.5f, 2.5f, false);
+        wave2Left = buildArmyEmitter(1, -2.5f, 5f, 2.5f, false);
         wave2Right = buildArmyEmitter(-1, meterSize.x+2.5f, 2.5f, 2.5f, false);
 
-        wave3Left = buildArmyEmitter(1, -1.25f, 2.5f, 2f, false);
-        wave3Right = buildArmyEmitter(-1, meterSize.x+1.5f, 2.5f, 2f, false);
+        wave3Left = buildArmyEmitter(1, -1.25f, 5f, 2f, false);
+        wave3Right = buildArmyEmitter(-1, meterSize.x+1.5f, 5f, 2f, false);
 
         engine.addEntity(wave1Left);
         engine.addEntity(wave1Right);
@@ -200,12 +206,62 @@ public class GameScreen extends ScreenAdapter {
         return e;
     }
 
+    private Array<TextureAtlas.AtlasRegion> getBuildingFrames(boolean includeWall){
+        int bound = includeWall ? 7 : 6;
+        int random = new Random().nextInt(bound);
+
+        switch(random) {
+            case 0:
+                return Assets.getBuildingAFrames();
+            case 1:
+                return Assets.getBuildingBFrames();
+            case 2:
+                return Assets.getBuildingCFrames();
+            case 3:
+                return Assets.getBuildingDFrames();
+            case 4:
+                return Assets.getBuildingEFrames();
+            case 5:
+                return Assets.getBuildingFFrames();
+            case 6:
+                return Assets.getWallFrames();
+            default:
+                return Assets.getBuildingAFrames();
+        }
+    }
+
+    private void addInitalBuildings(){
+        addBuildingComponent(36f, 8f, 2f, 2f);
+        addBuildingComponent(24f, 8f, 2f, 2f);
+        addBuildingComponent(30f, 8f, 2f, 2f);
+        addBuildingComponent(33f, 7f, 2f, 2f);
+        addBuildingComponent(27f, 7f, 2f, 2f);
+        addBuildingComponent(32f, 6f, 2f, 2f);
+        addBuildingComponent(28f, 6f, 2f, 2f);
+    }
+
+    private void addBuildingComponent(float x, float y, float boundW, float boundH) {
+        Entity bld = engine.createEntity();
+        bld.add(TextureComponent.create());
+        bld.add(TransformComponent.create()
+            .setPosition(x, y, ZUtil.TownZ)
+            .setScale(0.5f, 0.5f));
+        bld.add(AnimationComponent.create()
+            .addAnimation("DEFAULT", new Animation(1f / 15f, getBuildingFrames(false))));
+        bld.add(StateComponent.create()
+            .set("DEFAULT")
+            .setLooping(false));
+        bld.add(BoundsComponent.create()
+            .setBounds(0f, 0f, boundW, boundH));
+        engine.addEntity(bld);
+    }
+
     private void addGroundEnvironment(){
         Vector2 meterSize = RenderingSystem.getScreenSizeInMeters();
 
         Entity trees = engine.createEntity();
         trees.add(TransformComponent.create()
-                .setPosition(meterSize.x / 2f, 6f, ZUtil.DirtZ)
+                .setPosition(meterSize.x / 2f, 11f, ZUtil.TreesZ)
                 .setScale(1f, 1f));
         trees.add(TextureComponent.create()
                 .setRegion(Assets.getTreeLine()));

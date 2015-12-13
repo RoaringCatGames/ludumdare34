@@ -2,8 +2,8 @@ package com.roaringcatgames.ld34.desktop;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
-import com.roaringcatgames.ld34.VolcanoGame;
 import com.roaringcatgames.ld34.Constants;
+import com.roaringcatgames.ld34.VolcanoGame;
 
 public class DesktopLauncher {
 	public static void main (String[] arg) {

@@ -125,6 +125,29 @@ public class Assets {
     }
 
 
+    public static Array<TextureAtlas.AtlasRegion> getBuildingAFrames(){
+        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("Buildings/Building_A");
+    }
+    public static Array<TextureAtlas.AtlasRegion> getBuildingBFrames(){
+        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("Buildings/Building_B");
+    }
+    public static Array<TextureAtlas.AtlasRegion> getBuildingCFrames(){
+        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("Buildings/Building_C");
+    }
+    public static Array<TextureAtlas.AtlasRegion> getBuildingDFrames(){
+        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("Buildings/Building_D");
+    }
+    public static Array<TextureAtlas.AtlasRegion> getBuildingEFrames(){
+        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("Buildings/Building_E");
+    }
+    public static Array<TextureAtlas.AtlasRegion> getBuildingFFrames(){
+        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("Buildings/Building_F");
+    }
+    public static Array<TextureAtlas.AtlasRegion> getWallFrames(){
+        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("Buildings/Wall");
+    }
+
+
 
     public static Music getTitleMusic(){
         return am.get(TITLE_SONG, MUSIC);
