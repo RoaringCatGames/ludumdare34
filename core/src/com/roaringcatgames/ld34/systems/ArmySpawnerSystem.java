@@ -32,7 +32,6 @@ public class ArmySpawnerSystem extends IteratingSystem{
     public void update(float deltaTime) {
         super.update(deltaTime);
 
-        Gdx.app.log("ArmySpawnSystem", "Active Spawners: " + armySpawners.size);
         for(Entity spawner:armySpawners){
             ArmySpawnerComponent asc = asm.get(spawner);
             TransformComponent tc = tm.get(spawner);
@@ -41,10 +40,12 @@ public class ArmySpawnerSystem extends IteratingSystem{
             if(asc.elapsedTime - asc.lastSpawnTime >= asc.intervalSeconds || asc.lastSpawnTime == 0f){
 
                 Entity armyItem = ((PooledEngine)getEngine()).createEntity();
+                armyItem.add(ArmyUnitComponent.create());
                 armyItem.add(TextureComponent.create());
+
                 armyItem.add(TransformComponent.create()
                     .setPosition(tc.position.x, tc.position.y, ZUtil.ArmyZ)
-                    .setScale(1f*asc.direction, 1f));
+                    .setScale(1f * asc.direction, 1f));
                 armyItem.add(AnimationComponent.create()
                     .addAnimation("DEFAULT", new Animation(1f / 10f, Assets.getPikemanFrames())));
                 armyItem.add(StateComponent.create()

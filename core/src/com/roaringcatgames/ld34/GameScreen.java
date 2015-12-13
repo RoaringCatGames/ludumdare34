@@ -72,12 +72,15 @@ public class GameScreen extends ScreenAdapter {
         engine.addSystem(new GravitySystem(new Vector2(0f, -9.8f)));
         engine.addSystem(new ScreenWrapSystem(0f, 60f));
         engine.addSystem(new MovementSystem());
+        engine.addSystem(new BoundsSystem());
         engine.addSystem(new ArmySpawnerSystem());
         engine.addSystem(new LavaBallEmitterSystem());
         engine.addSystem(new LavaBallSystem(Assets.getMediumImpact()));
+        engine.addSystem(new MenuSystem());
 
         //Rendering system should go last
         engine.addSystem(renderingSystem);
+        engine.addSystem(new DebugSystem(batch, engine, renderingSystem.getCamera()));
 
         addClouds();
         addGroundEnvironment();
@@ -93,6 +96,9 @@ public class GameScreen extends ScreenAdapter {
         titleMusic.play();
         titleMusic.setLooping(true);
         titleMusic.setVolume(1f);
+
+        wave1Music = Assets.getWaveOneMuisc();
+
         isInitialized = true;
     }
 
@@ -151,12 +157,11 @@ public class GameScreen extends ScreenAdapter {
                 .setPosition(meterSize.x / 2f, meterSize.y / 2f, 100f)
                 .setRotation(0f)
                 .setScale(1f, 1f));
-
         e.add(TextureComponent.create()
             .setRegion(Assets.getBackground()));
-
         return e;
     }
+
     private Entity buildVolcano(){
         Entity e = engine.createEntity();
 
@@ -257,9 +262,9 @@ public class GameScreen extends ScreenAdapter {
         Vector2 meterSize = RenderingSystem.getScreenSizeInMeters();
         Entity holdText = engine.createEntity();
         holdText.add(TextureComponent.create()
-            .setRegion(Assets.getHoldTextRegion()));
+                .setRegion(Assets.getHoldTextRegion()));
         holdText.add(TransformComponent.create()
-                .setPosition(meterSize.x / 2f, meterSize.y*topAdjust, ZUtil.MenuZ));
+                .setPosition(meterSize.x / 2f, meterSize.y * topAdjust, ZUtil.MenuZ));
         engine.addEntity(holdText);
 
 
@@ -286,24 +291,28 @@ public class GameScreen extends ScreenAdapter {
         fButton.add(TextureComponent.create());
         fButton.add(AnimationComponent.create()
                 .addAnimation("DEFAULT", new Animation(1f, Assets.getFFrame()))
-                .addAnimation("PRESSED", new Animation(1f / 9f, Assets.getFDownFrame())));
+                .addAnimation("PRESSED", new Animation(1f / 18f, Assets.getFDownFrame())));
         fButton.add(TransformComponent.create()
                 .setPosition(meterSize.x / 3f, meterSize.y * lowAdjust, ZUtil.MenuZ));
         fButton.add(StateComponent.create()
                 .set("DEFAULT")
                 .setLooping(true));
+        fButton.add(ButtonComponent.create()
+            .setKey(Input.Keys.F));
         engine.addEntity(fButton);
 
         jButton = engine.createEntity();
         jButton.add(TextureComponent.create());
         jButton.add(AnimationComponent.create()
                 .addAnimation("DEFAULT", new Animation(1f, Assets.getJFrame()))
-                .addAnimation("PRESSED", new Animation(1f/18f, Assets.getJDownFrame())));
+                .addAnimation("PRESSED", new Animation(1f / 18f, Assets.getJDownFrame())));
         jButton.add(TransformComponent.create()
-                .setPosition((meterSize.x/3f)*2f, meterSize.y * lowAdjust, ZUtil.MenuZ));
+                .setPosition((meterSize.x / 3f) * 2f, meterSize.y * lowAdjust, ZUtil.MenuZ));
         jButton.add(StateComponent.create()
                 .set("DEFAULT")
                 .setLooping(true));
+        jButton.add(ButtonComponent.create()
+            .setKey(Input.Keys.J));
         engine.addEntity(jButton);
 
 
@@ -342,20 +351,20 @@ public class GameScreen extends ScreenAdapter {
         wrc.isActive = !wrc.isActive;
     }
 
-    private void checkButtonState(Entity button, int key){
-        StateComponent sc = button.getComponent(StateComponent.class);
-
-        if(ActionProcessor.isKeyDown(key) && sc.get() != "PRESSED"){
-            sc.set("PRESSED");
-        }else if(ActionProcessor.isKeyJustReleased(key)){
-            sc.set("DEFAULT");
-        }
-    }
+//    private void checkButtonState(Entity button, int key){
+//        StateComponent sc = button.getComponent(StateComponent.class);
+//
+//        if(ActionProcessor.isKeyDown(key) && sc.get() != "PRESSED"){
+//            sc.set("PRESSED");
+//        }else if(ActionProcessor.isKeyJustReleased(key)){
+//            sc.set("DEFAULT");
+//        }
+//    }
 
     private void menuUpdate(float delta){
 
-        checkButtonState(fButton, Input.Keys.F);
-        checkButtonState(jButton, Input.Keys.J);
+//        checkButtonState(fButton, Input.Keys.F);
+//        checkButtonState(jButton, Input.Keys.J);
 
         if(isReady){
             addWaveEmitters();
