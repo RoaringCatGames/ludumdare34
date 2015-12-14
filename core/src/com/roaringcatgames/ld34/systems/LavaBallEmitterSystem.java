@@ -100,6 +100,8 @@ public class LavaBallEmitterSystem extends IteratingSystem {
                 .setRotation(15f)
                 .setScale(xScale*0.5f, 0.5f));
 
+        e.add(DamageComponent.create()
+            .setDPS(10f));
         e.add(VelocityComponent.create()
                 .setSpeed(vel.x, vel.y));
 

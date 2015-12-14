@@ -46,6 +46,7 @@ public class ArmyUnitSystem extends IteratingSystem {
         for(Entity unit:units){
             BoundsComponent ub = bm.get(unit);
             VelocityComponent vc = vm.get(unit);
+            HealthComponent unitHealth = hm.get(unit);
             boolean isColliding = false;
             for(Entity building:buildings){
                 BoundsComponent bb = bm.get(building);
@@ -54,7 +55,7 @@ public class ArmyUnitSystem extends IteratingSystem {
                     vc.setSpeed(0f, 0f);
                     //Get Building Health here
                     HealthComponent buildingHealth = hm.get(building);
-                    HealthComponent unitHealth = hm.get(unit);
+
                     DamageComponent buildingDamage = dm.get(building);
                     DamageComponent unitDamage = dm.get(unit);
                     if(buildingHealth != null){
@@ -66,12 +67,12 @@ public class ArmyUnitSystem extends IteratingSystem {
                         if(buildingHealth.health == 0f){
                             getEngine().removeEntity(building);
                         }
-                        if(unitHealth.health == 0f){
-                            getEngine().removeEntity(unit);
-                        }
                     }
                     break;
                 }
+            }
+            if(unitHealth != null && unitHealth.health <= 0f){
+                getEngine().removeEntity(unit);
             }
             if(!isColliding && vc.speed.x == 0f && !unit.isScheduledForRemoval()){
                 TransformComponent tc = unit.getComponent(TransformComponent.class);
