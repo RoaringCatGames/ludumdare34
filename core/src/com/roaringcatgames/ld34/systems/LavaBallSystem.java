@@ -27,7 +27,8 @@ public class LavaBallSystem extends IteratingSystem {
     private ComponentMapper<VelocityComponent> vm;
     private ComponentMapper<ArmyUnitComponent> am;
     private ComponentMapper<BoundsComponent> bm;
-
+    private ComponentMapper<HealthComponent> hm;
+    private ComponentMapper<DamageComponent> dm;
 
     public LavaBallSystem(Sound lavaHitSound) {
         super(Family
@@ -38,6 +39,8 @@ public class LavaBallSystem extends IteratingSystem {
         vm = ComponentMapper.getFor(VelocityComponent.class);
         am = ComponentMapper.getFor(ArmyUnitComponent.class);
         bm = ComponentMapper.getFor(BoundsComponent.class);
+        hm = ComponentMapper.getFor(HealthComponent.class);
+        dm = ComponentMapper.getFor(DamageComponent.class);
 
         lavaBalls = new Array<>();
         units = new Array<>();
@@ -53,7 +56,14 @@ public class LavaBallSystem extends IteratingSystem {
             for(Entity lava:lavaBalls) {
                 TransformComponent tc = tm.get(lava);
                 if (bc.bounds.contains(tc.position.x, tc.position.y)){
-                    getEngine().removeEntity(unit);
+
+                    DamageComponent ld = dm.get(lava);
+                    HealthComponent unitHealth = hm.get(unit);
+                    if(unitHealth != null) {
+                        unitHealth.health = Math.max(0f, (unitHealth.health - ld.dps * deltaTime));
+                    }else {
+                        getEngine().removeEntity(unit);
+                    }
                 }
             }
         }

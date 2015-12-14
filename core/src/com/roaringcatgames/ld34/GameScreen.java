@@ -175,7 +175,6 @@ public class GameScreen extends ScreenAdapter {
         engine.getSystem(HealthRenderSystem.class).setProcessing(false);
 
         addMenu();
-        addInitalBuildings();
 
         titleMusic = Assets.getTitleMusic();
         titleMusic.play();
@@ -290,62 +289,6 @@ public class GameScreen extends ScreenAdapter {
         e.add(a);
 
         return e;
-    }
-
-    private Array<TextureAtlas.AtlasRegion> getBuildingFrames(boolean includeWall){
-        int bound = includeWall ? 7 : 6;
-        int random = new Random().nextInt(bound);
-
-        switch(random) {
-            case 0:
-                return Assets.getBuildingAFrames();
-            case 1:
-                return Assets.getBuildingBFrames();
-            case 2:
-                return Assets.getBuildingCFrames();
-            case 3:
-                return Assets.getBuildingDFrames();
-            case 4:
-                return Assets.getBuildingEFrames();
-            case 5:
-                return Assets.getBuildingFFrames();
-            case 6:
-                return Assets.getWallFrames();
-            default:
-                return Assets.getBuildingAFrames();
-        }
-    }
-
-    private void addInitalBuildings(){
-        addBuildingComponent(36f, 8f, 2f, 2f);
-        addBuildingComponent(24f, 8f, 2f, 2f);
-        addBuildingComponent(30f, 8f, 2f, 2f);
-        addBuildingComponent(33f, 7f, 2f, 2f);
-        addBuildingComponent(27f, 7f, 2f, 2f);
-        addBuildingComponent(32f, 6f, 2f, 2f);
-        addBuildingComponent(28f, 6f, 2f, 2f);
-    }
-
-    private void addBuildingComponent(float x, float y, float boundW, float boundH) {
-        Entity bld = engine.createEntity();
-        bld.add(TextureComponent.create());
-        bld.add(BuildingComponent.create());
-        bld.add(TransformComponent.create()
-            .setPosition(x, y, ZUtil.TownZ)
-            .setScale(0.5f, 0.5f));
-        bld.add(AnimationComponent.create()
-            .addAnimation("DEFAULT", new Animation(1f / 15f, getBuildingFrames(false))));
-        bld.add(StateComponent.create()
-            .set("DEFAULT")
-            .setLooping(false));
-        bld.add(BoundsComponent.create()
-            .setBounds(0f, 0f, boundW, boundH));
-        bld.add(HealthComponent.create()
-            .setMaxHealth(20f)
-            .setHealth(20f));
-        bld.add(DamageComponent.create()
-            .setDPS(0.25f));
-        engine.addEntity(bld);
     }
 
     private void addGroundEnvironment(){
