@@ -12,6 +12,7 @@ public class ArmySpawnerComponent implements Component {
     public float intervalSeconds = 5f;
     public float lastSpawnTime = 0f;
     public float elapsedTime = 0f;
+    public float baseUnitSpeed = 2f;
 
     public static ArmySpawnerComponent create(){
         return new ArmySpawnerComponent();
@@ -39,6 +40,11 @@ public class ArmySpawnerComponent implements Component {
 
     public ArmySpawnerComponent setElapsedTime(float time){
         this.elapsedTime = time;
+        return this;
+    }
+
+    public ArmySpawnerComponent setBaseUnitSpeed(float vel){
+        this.baseUnitSpeed = vel;
         return this;
     }
 }

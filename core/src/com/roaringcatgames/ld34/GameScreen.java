@@ -54,6 +54,86 @@ public class GameScreen extends ScreenAdapter {
         this.dispatcher = dispatcher;
     }
 
+    public void doEvent(String eventName){
+        switch(eventName){
+            case "MENUOVER":
+                //Disable System
+                engine.getSystem(MenuSystem.class).setProcessing(false);
+                engine.getSystem(HealthRenderSystem.class).setProcessing(true);
+                titleMusic.stop();
+                wave1Music.play();
+                //StartWave
+                addWaveEmitters();
+                isWaving = true;
+                break;
+            case "GAMEOVER":
+                engine.getSystem(MovementSystem.class).setProcessing(false);
+                Gdx.app.log("GameScreen", "YOU LOSE!!");
+                break;
+        }
+    }
+
+
+    private boolean isWaving = false;
+    private float elapsedWaveTime = 0f;
+    private int wave = 1;
+    private void update(float delta){
+
+        //TODO: Remove:
+        if(Gdx.input.isKeyJustPressed(Input.Keys.NUM_1)){
+            toggleWaves(wave1Left, wave1Right);
+        }
+
+        if(Gdx.input.isKeyJustPressed(Input.Keys.NUM_2)){
+            toggleWaves(wave2Left, wave2Right);
+        }
+
+        if(Gdx.input.isKeyJustPressed(Input.Keys.NUM_3)){
+            toggleWaves(wave3Left, wave3Right);
+        }
+
+
+        if(isWaving){
+            elapsedWaveTime += delta;
+            if(elapsedWaveTime >= 10*wave){
+                Gdx.app.log("GAME SCREEN", "Wave " + wave + " finished");
+                elapsedWaveTime = 0f;
+                wave++;
+                switch(wave){
+                    case 2:
+                        wave1Music.stop();
+                        wave2Music.play();
+                        toggleWaves(wave2Left, wave2Right);
+                        break;
+                    case 3:
+                        wave2Music.stop();
+                        wave3Music.play();
+                        toggleWaves(wave3Left, wave3Right);
+                        break;
+                    default:
+                        toggleWaves(wave1Left, wave1Right);
+                        toggleWaves(wave2Left, wave2Right);
+                        toggleWaves(wave3Left, wave3Right);
+                        isWaving = false;
+                        Gdx.app.log("Game Screen", "You Survived!");
+                        break;
+                }
+            }
+        }
+
+        engine.update(delta);
+        ActionProcessor.clear();
+    }
+
+    @Override
+    public void render(float delta) {
+        if(isInitialized) {
+            update(delta);
+        }else{
+            init();
+        }
+    }
+
     private void init(){
         Gdx.app.log("GameScreen", "Initializing");
         isInitialized = true;
@@ -92,6 +172,7 @@ public class GameScreen extends ScreenAdapter {
         engine.addEntity(buildLavaBallEmitter(Input.Keys.F, -minXFirballForce, 5f));
         engine.addEntity(buildLavaBallEmitter(Input.Keys.J, minXFirballForce, 5f));
 
+        engine.getSystem(HealthRenderSystem.class).setProcessing(false);
 
         addMenu();
         addInitalBuildings();
@@ -123,14 +204,14 @@ public class GameScreen extends ScreenAdapter {
     private void addWaveEmitters() {
         Vector2 meterSize = RenderingSystem.getScreenSizeInMeters();
         float armyEmitterHeight = 6f;
-        wave1Left = buildArmyEmitter(1, -3.75f, armyEmitterHeight, 3f, true);
-        wave1Right = buildArmyEmitter(-1, meterSize.x+3.75f, armyEmitterHeight, 3f, true);
+        wave1Left = buildArmyEmitter(1, 2f, -3.75f, armyEmitterHeight, 8f, 0f, true);
+        wave1Right = buildArmyEmitter(-1,2f, meterSize.x+3.75f, armyEmitterHeight, 8f, 4f, true);
 
-        wave2Left = buildArmyEmitter(1, -2.5f, 5f, 2.5f, false);
-        wave2Right = buildArmyEmitter(-1, meterSize.x+2.5f, armyEmitterHeight, 2.5f, false);
+        wave2Left = buildArmyEmitter(1, 2f, -2.5f, armyEmitterHeight, 6f, 3f, false);
+        wave2Right = buildArmyEmitter(-1, 2f, meterSize.x+2.5f, armyEmitterHeight, 6f, 0f, false);
 
-        wave3Left = buildArmyEmitter(1, -1.25f, 5f, 2f, false);
-        wave3Right = buildArmyEmitter(-1, meterSize.x+1.5f, armyEmitterHeight, 2f, false);
+        wave3Left = buildArmyEmitter(1, 2f, -1.25f, armyEmitterHeight, 4f, 0f, false);
+        wave3Right = buildArmyEmitter(-1, 2f, meterSize.x+1.5f, armyEmitterHeight, 4f, 2f, false);
 
         engine.addEntity(wave1Left);
         engine.addEntity(wave1Right);
@@ -156,13 +237,15 @@ public class GameScreen extends ScreenAdapter {
         return e;
     }
 
-    private Entity buildArmyEmitter(int direction, float x, float y, float intervalSeconds, boolean startActive) {
+    private Entity buildArmyEmitter(int direction, float baseUnitSpeed, float x, float y, float intervalSeconds, float headStart, boolean startActive) {
         Entity e = engine.createEntity();
 
         e.add(ArmySpawnerComponent.create()
                 .setActive(startActive)
                 .setDirection(direction)
-                .setIntervalSeconds(intervalSeconds));
+                .setIntervalSeconds(intervalSeconds)
+                .setElapsedTime(headStart)
+                .setBaseUnitSpeed(baseUnitSpeed));
         e.add(TransformComponent.create()
                 .setPosition(x, y));
         return e;
@@ -444,82 +527,5 @@ public class GameScreen extends ScreenAdapter {
         wrc.isActive = !wrc.isActive;
     }
 
-    public void doEvent(String eventName){
-        switch(eventName){
-            case "MENUOVER":
-                //Disable System
-                engine.getSystem(MenuSystem.class).setProcessing(false);
-                titleMusic.stop();
-                wave1Music.play();
-                //StartWave
-                addWaveEmitters();
-                isWaving = true;
-                break;
-            case "GAMEOVER":
-                engine.getSystem(MovementSystem.class).setProcessing(false);
-                Gdx.app.log("GameScreen", "YOU LOSE!!");
-                break;
-        }
-    }
 
-
-    private boolean isWaving = false;
-    private float elapsedWaveTime = 0f;
-    private int wave = 1;
-    private void update(float delta){
-
-        //TODO: Remove:
-        if(Gdx.input.isKeyJustPressed(Input.Keys.NUM_1)){
-            toggleWaves(wave1Left, wave1Right);
-        }
-
-        if(Gdx.input.isKeyJustPressed(Input.Keys.NUM_2)){
-            toggleWaves(wave2Left, wave2Right);
-        }
-
-        if(Gdx.input.isKeyJustPressed(Input.Keys.NUM_3)){
-            toggleWaves(wave3Left, wave3Right);
-        }
-
-
-        if(isWaving){
-            elapsedWaveTime += delta;
-            if(elapsedWaveTime >= 10*wave){
-                Gdx.app.log("GAME SCREEN", "Wave " + wave + " finished");
-                elapsedWaveTime = 0f;
-                wave++;
-                switch(wave){
-                    case 2:
-                        wave1Music.stop();
-                        wave2Music.play();
-                        toggleWaves(wave2Left, wave2Right);
-                        break;
-                    case 3:
-                        wave2Music.stop();
-                        wave3Music.play();
-                        toggleWaves(wave3Left, wave3Right);
-                        break;
-                    default:
-                        toggleWaves(wave1Left, wave1Right);
-                        toggleWaves(wave2Left, wave2Right);
-                        toggleWaves(wave3Left, wave3Right);
-                        isWaving = false;
-                        Gdx.app.log("Game Screen", "You Survived!");
-                        break;
-                }
-            }
-        }
-
-        engine.update(delta);
-        ActionProcessor.clear();
-    }
-
-    @Override
-    public void render(float delta) {
-        if(isInitialized) {
-            update(delta);
-        }else{
-            init();
-        }
-    }
 }

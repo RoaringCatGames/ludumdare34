@@ -42,7 +42,9 @@ public class ArmySpawnerSystem extends IteratingSystem{
             asc.elapsedTime += deltaTime;
             if(asc.elapsedTime - asc.lastSpawnTime >= asc.intervalSeconds || asc.lastSpawnTime == 0f){
 
+                //Randomly Horses
                 boolean isHorse = r.nextFloat() > 0.90f;
+
                 Entity armyItem = ((PooledEngine)getEngine()).createEntity();
                 armyItem.add(ArmyUnitComponent.create());
                 armyItem.add(TextureComponent.create());
@@ -51,34 +53,28 @@ public class ArmySpawnerSystem extends IteratingSystem{
                 armyItem.add(TransformComponent.create()
                     .setPosition(tc.position.x, y, ZUtil.ArmyZ)
                     .setScale(1f * -asc.direction, 1f));
-                if(isHorse) {
-                    armyItem.add(AnimationComponent.create()
-                            .addAnimation("DEFAULT", new Animation(1f / 10f, Assets.getHorsemanFrames())));
-                }else{
-                    armyItem.add(AnimationComponent.create()
-                            .addAnimation("DEFAULT", new Animation(1f / 10f, Assets.getPikemanFrames())));
-                }
+
                 armyItem.add(StateComponent.create()
                     .set("DEFAULT")
                     .setLooping(true));
                 armyItem.add(VelocityComponent.create()
-                    .setSpeed(3f * asc.direction, 0f));
+                    .setSpeed(asc.baseUnitSpeed * asc.direction, 0f));
 
                 if(isHorse) {
+                    armyItem.add(AnimationComponent.create()
+                            .addAnimation("DEFAULT", new Animation(1f / 10f, Assets.getHorsemanFrames())));
                     armyItem.add(BoundsComponent.create()
-                            .setBounds(0f, 0f, 3f, 3f));
-                }else{
-                    armyItem.add(BoundsComponent.create()
-                            .setBounds(0f, 0f, 4f, 4f));
-                }
-
-                if(isHorse){
+                            .setBounds(0f, 0f, 6f, 4f));
                     armyItem.add(DamageComponent.create()
                             .setDPS(2f));
                     armyItem.add(HealthComponent.create()
                             .setHealth(4f)
                             .setMaxHealth(4f));
-                }else {
+                }else{
+                    armyItem.add(AnimationComponent.create()
+                            .addAnimation("DEFAULT", new Animation(1f / 10f, Assets.getPikemanFrames())));
+                    armyItem.add(BoundsComponent.create()
+                            .setBounds(0f, 0f, 4f, 4f));
                     armyItem.add(DamageComponent.create()
                             .setDPS(1f));
                     armyItem.add(HealthComponent.create()
