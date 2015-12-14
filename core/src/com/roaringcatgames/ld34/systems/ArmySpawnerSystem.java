@@ -12,6 +12,8 @@ import com.roaringcatgames.ld34.Assets;
 import com.roaringcatgames.ld34.ZUtil;
 import com.roaringcatgames.ld34.components.*;
 
+import java.util.Random;
+
 /**
  * Created by barry on 12/13/15 @ 11:20 AM.
  */
@@ -31,6 +33,7 @@ public class ArmySpawnerSystem extends IteratingSystem{
     @Override
     public void update(float deltaTime) {
         super.update(deltaTime);
+        Random r = new Random();
 
         for(Entity spawner:armySpawners){
             ArmySpawnerComponent asc = asm.get(spawner);
@@ -39,28 +42,49 @@ public class ArmySpawnerSystem extends IteratingSystem{
             asc.elapsedTime += deltaTime;
             if(asc.elapsedTime - asc.lastSpawnTime >= asc.intervalSeconds || asc.lastSpawnTime == 0f){
 
+                boolean isHorse = r.nextFloat() > 0.90f;
                 Entity armyItem = ((PooledEngine)getEngine()).createEntity();
                 armyItem.add(ArmyUnitComponent.create());
                 armyItem.add(TextureComponent.create());
 
+                float y = Math.max(5f, (r.nextFloat() * tc.position.y + 3f));
                 armyItem.add(TransformComponent.create()
-                    .setPosition(tc.position.x, tc.position.y, ZUtil.ArmyZ)
+                    .setPosition(tc.position.x, y, ZUtil.ArmyZ)
                     .setScale(1f * -asc.direction, 1f));
-                armyItem.add(AnimationComponent.create()
-                    .addAnimation("DEFAULT", new Animation(1f / 10f, Assets.getPikemanFrames())));
+                if(isHorse) {
+                    armyItem.add(AnimationComponent.create()
+                            .addAnimation("DEFAULT", new Animation(1f / 10f, Assets.getHorsemanFrames())));
+                }else{
+                    armyItem.add(AnimationComponent.create()
+                            .addAnimation("DEFAULT", new Animation(1f / 10f, Assets.getPikemanFrames())));
+                }
                 armyItem.add(StateComponent.create()
                     .set("DEFAULT")
                     .setLooping(true));
                 armyItem.add(VelocityComponent.create()
-                    .setSpeed(5f * asc.direction, 0f));
-                armyItem.add(BoundsComponent.create()
-                    .setBounds(0f, 0f, 3f, 3f));
+                    .setSpeed(3f * asc.direction, 0f));
 
-                armyItem.add(DamageComponent.create()
-                    .setDPS(1f));
-                armyItem.add(HealthComponent.create()
-                    .setHealth(2f)
-                    .setMaxHealth(2f));
+                if(isHorse) {
+                    armyItem.add(BoundsComponent.create()
+                            .setBounds(0f, 0f, 3f, 3f));
+                }else{
+                    armyItem.add(BoundsComponent.create()
+                            .setBounds(0f, 0f, 4f, 4f));
+                }
+
+                if(isHorse){
+                    armyItem.add(DamageComponent.create()
+                            .setDPS(2f));
+                    armyItem.add(HealthComponent.create()
+                            .setHealth(4f)
+                            .setMaxHealth(4f));
+                }else {
+                    armyItem.add(DamageComponent.create()
+                            .setDPS(1f));
+                    armyItem.add(HealthComponent.create()
+                            .setHealth(2f)
+                            .setMaxHealth(2f));
+                }
 
                 armyItem.add(KinematicComponent.create());
 

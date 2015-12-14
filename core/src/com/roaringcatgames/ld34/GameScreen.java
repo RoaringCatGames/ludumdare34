@@ -258,8 +258,8 @@ public class GameScreen extends ScreenAdapter {
         bld.add(BoundsComponent.create()
             .setBounds(0f, 0f, boundW, boundH));
         bld.add(HealthComponent.create()
-            .setMaxHealth(5f)
-            .setHealth(5f));
+            .setMaxHealth(20f)
+            .setHealth(20f));
         bld.add(DamageComponent.create()
             .setDPS(0.25f));
         engine.addEntity(bld);
