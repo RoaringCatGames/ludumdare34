@@ -5,6 +5,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.ashley.systems.IteratingSystem;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
@@ -25,6 +26,8 @@ public class LavaBallEmitterSystem extends IteratingSystem {
     private ArrayMap<Integer, Array<Entity>> emitterMap;
     private ArrayMap<Integer, Float> charges;
 
+    Sound lavaFlight;
+
     private float _maxChargeModifier = 2f;
     private float _chargeIncrease =6f;
 
@@ -34,6 +37,7 @@ public class LavaBallEmitterSystem extends IteratingSystem {
         tm = ComponentMapper.getFor(TransformComponent.class);
         emitterMap = new ArrayMap<>();
         charges = new ArrayMap<>();
+        lavaFlight = Assets.getLavaFlightSound();
     }
 
     @Override
@@ -47,6 +51,8 @@ public class LavaBallEmitterSystem extends IteratingSystem {
                     TransformComponent tfc = tm.get(e);
                     this.getEngine().addEntity(buildLavaBall(tfc.position,
                             comp.emissionVelocity.cpy().scl(charges.get(key))));
+                    long id = lavaFlight.play(1f);
+                    lavaFlight.setPitch(id, 0.2f);
                     charges.put(key, 0f);
                 }
             }else if (ActionProcessor.isKeyDown(key)) {

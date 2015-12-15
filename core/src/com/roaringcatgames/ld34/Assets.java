@@ -27,9 +27,14 @@ public class Assets {
         am.load(WAVE_ONE_SONG, MUSIC);
         am.load(WAVE_TWO_SONG, MUSIC);
         am.load(WAVE_THREE_SONG, MUSIC);
+        am.load(FINAL_SONG, MUSIC);
+        am.load(MARCHING, MUSIC);
+        am.load(FIGHTING, MUSIC);
         am.load(SMALL_IMPACT, SOUND);
         am.load(MED_IMPACT, SOUND);
         am.load(VOLCANO_RUMBLE, SOUND);
+        am.load(LAVA_FLIGHT, SOUND);
+
 //        am.load(FONT, BITMAP_FONT);
 
         return am;
@@ -172,6 +177,15 @@ public class Assets {
     public static Music getWaveThreeMusic(){
         return am.get(WAVE_THREE_SONG, MUSIC);
     }
+    public static Music getFinalMusic(){
+        return am.get(FINAL_SONG, MUSIC);
+    }
+    public static Music getMarching(){
+        return am.get(MARCHING, MUSIC);
+    }
+    public static Music getFighting(){
+        return am.get(FIGHTING, MUSIC);
+    }
 
     public static Sound getSmallImpact(){
         return am.get(SMALL_IMPACT, SOUND);
@@ -182,6 +196,10 @@ public class Assets {
     public static Sound getVolcanoRumble(){
         return am.get(VOLCANO_RUMBLE, SOUND);
     }
+    public static Sound getLavaFlightSound(){
+        return am.get(LAVA_FLIGHT, SOUND);
+    }
+
 
 
 
@@ -200,7 +218,13 @@ public class Assets {
     private static final String WAVE_ONE_SONG = "music/wave-one-music.mp3";
     private static final String WAVE_TWO_SONG = "music/wave-two-music.mp3";
     private static final String WAVE_THREE_SONG = "music/wave-three-music.mp3";
+    private static final String FINAL_SONG = "music/final-music.mp3";
+    private static final String MARCHING = "music/marching.mp3";
+    private static final String FIGHTING = "music/fighting.mp3";
+
     private static final String SMALL_IMPACT = "sfx/small-impact.mp3";
     private static final String MED_IMPACT = "sfx/med-impact.mp3";
     private static final String VOLCANO_RUMBLE = "sfx/volcano-rumble.mp3";
+    private static final String LAVA_FLIGHT = "sfx/lava-flight.mp3";
+
 }
