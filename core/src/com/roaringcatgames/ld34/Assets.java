@@ -164,6 +164,18 @@ public class Assets {
         return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("Buildings/Wall");
     }
 
+    public static Array<TextureAtlas.AtlasRegion> getPinkTreeFrames(){
+        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("Trees/Tree A Idle");
+    }
+
+    public static Array<TextureAtlas.AtlasRegion> getGreenTreeFrames(){
+        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("Trees/Tree B");
+    }
+
+    public static TextureRegion getMoon() {
+        return am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("Fannie-Moon");
+    }
+
 
 
     public static Music getTitleMusic(){
@@ -205,6 +217,7 @@ public class Assets {
 
 
 
+
     private static Class<TextureAtlas> TEXTURE_ATLAS = TextureAtlas.class;
     private static Class<Music> MUSIC = Music.class;
     private static Class<BitmapFont> BITMAP_FONT = BitmapFont.class;
@@ -227,5 +240,4 @@ public class Assets {
     private static final String MED_IMPACT = "sfx/med-impact.mp3";
     private static final String VOLCANO_RUMBLE = "sfx/volcano-rumble.mp3";
     private static final String LAVA_FLIGHT = "sfx/lava-flight.mp3";
-
 }
