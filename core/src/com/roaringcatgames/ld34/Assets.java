@@ -228,4 +228,7 @@ public class Assets {
     private static final String VOLCANO_RUMBLE = "sfx/volcano-rumble.mp3";
     private static final String LAVA_FLIGHT = "sfx/lava-flight.mp3";
 
+    public static TextureRegion getMoon() {
+        return am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("Fannie-Moon");
+    }
 }

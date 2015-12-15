@@ -427,6 +427,15 @@ public class GameScreen extends ScreenAdapter {
         engine.addEntity(createScreenWrappedEntity((meterSize.x / 4f) * 3f, meterSize.y * smallAdjust, 77f,
                 0f, 1f, 1f, Assets.getCloudPuffBlueFrames(), 4f));
 
+
+        Entity moon = engine.createEntity();
+        moon.add(TransformComponent.create()
+                .setPosition(50f, 23f, ZUtil.MoonZ)
+                .setScale(0.35f, 0.35f));
+        moon.add(TextureComponent.create()
+            .setRegion(Assets.getMoon()));
+        engine.addEntity(moon);
+
     }
 
     private void addMenu(){
