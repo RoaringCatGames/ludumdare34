@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
        <head>
-              <title>test-ecs-box2d</title>
+              <title>Mount FJ</title>
               <meta http-equiv="content-type" content="text/html; charset=UTF-8">
               <link href="styles.css" rel="stylesheet" type="text/css">
               <script src="soundmanager2-setup.js"></script>
@@ -9,7 +9,6 @@
        </head>
 
        <body>
-              <a class="superdev" href="javascript:%7B%20window.__gwt_bookmarklet_params%20%3D%20%7B'server_url'%3A'http%3A%2F%2Flocalhost%3A9876%2F'%7D%3B%20var%20s%20%3D%20document.createElement('script')%3B%20s.src%20%3D%20'http%3A%2F%2Flocalhost%3A9876%2Fdev_mode_on.js'%3B%20void(document.getElementsByTagName('head')%5B0%5D.appendChild(s))%3B%7D">&#8635;</a>
               <div align="center" id="embed-html"></div>
               <script type="text/javascript" src="html/html.nocache.js"></script>
        </body>
@@ -28,5 +27,26 @@
               }
               document.getElementById('embed-html').addEventListener('mousedown', handleMouseDown, false);
               document.getElementById('embed-html').addEventListener('mouseup', handleMouseUp, false);
+              window.onkeydown = function(e) {
+                  if((e.keyCode == 32 && e.target == document.body) ||
+                          (e.keyCode == 9 && e.target == document.body)  ||
+                          (e.keyCode == 37 && e.target == document.body)  ||
+                          (e.keyCode == 38 && e.target == document.body)  ||
+                          (e.keyCode == 39 && e.target == document.body)  ||
+                          (e.keyCode == 40 && e.target == document.body)) {
+                      e.preventDefault();
+                      return false;
+                  }
+              };
+       </script>
+
+       <script>
+           (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                       (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+                   m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+           })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+           ga('create', 'UA-57616527-1', 'auto');
+           ga('send', 'pageview');
        </script>
 </html>

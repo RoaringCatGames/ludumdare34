@@ -72,8 +72,10 @@ public class GameScreen extends ScreenAdapter {
                 break;
             case "STARTWAVE":
                 Gdx.app.log("Game Screen", "Starting wave " + wave + "!");
-                safeBanner.getComponent(StateComponent.class)
-                        .set("DOWN");
+                if(wave != 1) {
+                    safeBanner.getComponent(StateComponent.class)
+                            .set("DOWN");
+                }
                 switch(wave){
                     case 1:
                         currentMusic = wave1Music;
@@ -195,7 +197,7 @@ public class GameScreen extends ScreenAdapter {
         //Rendering system should go last
         engine.addSystem(renderingSystem);
         engine.addSystem(new HealthRenderSystem(renderingSystem.getCamera()));
-        engine.addSystem(new DebugSystem(batch, engine, renderingSystem.getCamera()));
+        //engine.addSystem(new DebugSystem(batch, engine, renderingSystem.getCamera()));
         engine.addSystem(new CitySystem(this));
 
         addClouds();

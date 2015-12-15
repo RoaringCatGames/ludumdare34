@@ -20,9 +20,10 @@ public class Assets {
 
         am = new AssetManager();
         am.load(LOADING_ATLAS, TEXTURE_ATLAS);
+        am.load(SPRITE_ATLAS, TEXTURE_ATLAS);
         am.finishLoading();
         am.load(ANI_ATLAS, TEXTURE_ATLAS);
-        am.load(SPRITE_ATLAS, TEXTURE_ATLAS);
+
         am.load(TITLE_SONG, MUSIC);
         am.load(WAVE_ONE_SONG, MUSIC);
         am.load(WAVE_TWO_SONG, MUSIC);
