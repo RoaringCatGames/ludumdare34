@@ -8,6 +8,7 @@ import com.roaringcatgames.ld34.VolcanoGame;
 public class DesktopLauncher {
 	public static void main (String[] arg) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
+		config.title = "Mount FJ";
 		config.height = Constants.height;
 		config.width = Constants.width;
 		new LwjglApplication(new VolcanoGame(), config);

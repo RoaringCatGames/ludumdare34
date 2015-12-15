@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Vector2;
 import com.roaringcatgames.ld34.components.AnimationComponent;
 import com.roaringcatgames.ld34.components.StateComponent;
 import com.roaringcatgames.ld34.components.TextureComponent;
@@ -26,7 +27,7 @@ public class SplashScreen extends LazyInitScreen {
     private IScreenDispatcher dispatcher;
     private PooledEngine engine;
 
-    private int minSpalshSeconds = 1;
+    private int minSpalshSeconds = 2;
     private float elapsedTime = 0f;
 
     public SplashScreen(SpriteBatch batch, IScreenDispatcher dispatcher){
@@ -43,6 +44,16 @@ public class SplashScreen extends LazyInitScreen {
         engine.addSystem(new AnimationSystem());
         engine.addSystem(render);
 
+        Entity e = engine.createEntity();
+
+        e.add(TransformComponent.create()
+                .setPosition(render.getCamera().viewportWidth/2f, render.getCamera().viewportHeight/2f, 100f)
+                .setRotation(0f)
+                .setScale(1f, 1f));
+        e.add(TextureComponent.create()
+                .setRegion(Assets.getBackground()));
+        engine.addEntity(e);
+
         Entity loading = engine.createEntity();
         loading.add(TransformComponent.create()
             .setPosition(render.getCamera().viewportWidth/2f, render.getCamera().viewportHeight/2f, 0f)
@@ -50,9 +61,9 @@ public class SplashScreen extends LazyInitScreen {
         loading.add(TextureComponent.create());
         loading.add(StateComponent.create()
             .set("DEFAULT")
-            .setLooping(true));
+            .setLooping(false));
         loading.add(AnimationComponent.create()
-            .addAnimation("DEFAULT", new Animation(1f / 4f, Assets.getLoadingFrames())));
+            .addAnimation("DEFAULT", new Animation(1f / 5f, Assets.getLoadingFrames())));
 
         engine.addEntity(loading);
     }

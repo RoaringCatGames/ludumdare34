@@ -45,7 +45,7 @@ public class Assets {
      * @return AtlasRegions for the loading animation.
      */
     public static Array<TextureAtlas.AtlasRegion> getLoadingFrames(){
-        return am.get(LOADING_ATLAS, TEXTURE_ATLAS).findRegions("loading");
+        return am.get(LOADING_ATLAS, TEXTURE_ATLAS).findRegions("Loading");
     }
     public static Array<TextureAtlas.AtlasRegion> getLavaBallFrames(){
         return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("Fireball/Fireball");
