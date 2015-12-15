@@ -60,8 +60,8 @@ public class WaveSystem extends IteratingSystem {
 
         if(isWaving && !isWaiting){
             elapsedWaveTime += deltaTime;
-            //float timeToKeepWaving = wave != 3 ? 60 : 71;
-            if(elapsedWaveTime >= 10*wave){
+            float timeToKeepWaving = wave != 3 ? 60 : 71;
+            if(elapsedWaveTime >= timeToKeepWaving){
                 for(Entity spawner:spawners){
                     asm.get(spawner).isActive = false;
                 }

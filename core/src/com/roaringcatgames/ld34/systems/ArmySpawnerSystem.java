@@ -52,7 +52,7 @@ public class ArmySpawnerSystem extends IteratingSystem{
                 float y = Math.max(5f, (r.nextFloat() * tc.position.y + 3f));
                 armyItem.add(TransformComponent.create()
                     .setPosition(tc.position.x, y, ZUtil.ArmyZ)
-                    .setScale(1f * -asc.direction, 1f));
+                    .setScale(0.5f * -asc.direction, 0.5f));
 
                 armyItem.add(StateComponent.create()
                     .set("DEFAULT")

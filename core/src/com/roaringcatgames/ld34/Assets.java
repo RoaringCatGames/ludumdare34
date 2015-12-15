@@ -46,7 +46,7 @@ public class Assets {
         return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("Fireball/Fireball");
     }
     public static Array<TextureAtlas.AtlasRegion> getLavaBallExplodingFrames(){
-        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("Fireball/Fireball");
+        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("Explosion/Explosion");
     }
 
     public static TextureRegion getDirt(){
@@ -58,12 +58,6 @@ public class Assets {
 
     public static TextureRegion getBackground(){
         return am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("Background");
-    }
-    public static TextureRegion getBackGrass(){
-        return am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("Grass/GrassBack");
-    }
-    public static TextureRegion getFrontGrass(){
-        return am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("Grass/GrassFront");
     }
 
     private static ArrayMap<String, Array<TextureAtlas.AtlasRegion>> volcanoStateFrames;

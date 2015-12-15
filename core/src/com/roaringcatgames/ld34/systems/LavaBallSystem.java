@@ -29,6 +29,7 @@ public class LavaBallSystem extends IteratingSystem {
     private ComponentMapper<BoundsComponent> bm;
     private ComponentMapper<HealthComponent> hm;
     private ComponentMapper<DamageComponent> dm;
+    private ComponentMapper<StateComponent> sm;
 
     public LavaBallSystem(Sound lavaHitSound) {
         super(Family
@@ -41,6 +42,7 @@ public class LavaBallSystem extends IteratingSystem {
         bm = ComponentMapper.getFor(BoundsComponent.class);
         hm = ComponentMapper.getFor(HealthComponent.class);
         dm = ComponentMapper.getFor(DamageComponent.class);
+        sm = ComponentMapper.getFor(StateComponent.class);
 
         lavaBalls = new Array<>();
         units = new Array<>();
@@ -73,34 +75,45 @@ public class LavaBallSystem extends IteratingSystem {
             TransformComponent tc = tm.get(entity);
             VelocityComponent vc = vm.get(entity);
 
-            if(vc.speed.y > 0){
-                tc.position.set(tc.position.x, tc.position.y, ZUtil.FireballBackZ);
-            }else{
-                tc.position.set(tc.position.x, tc.position.y, ZUtil.FireballFrontZ);
+            StateComponent sc = sm.get(entity);
+            if(tc.position.y <= 6f){
+                if(sc.get() != "EXPLODING") {
+                    sc.set("EXPLODING")
+                            .setLooping(false);
+                    lavaHitSound.play();
+                    vc.setSpeed(0f, 0f);
+                    tc.setRotation(0f);
+                    tc.setScale(1f, 1f);
+                    entity.add(KinematicComponent.create());
+                }else if(entity.getComponent(AnimationComponent.class).animations.get("EXPLODING").isAnimationFinished(sc.time)) {
+                    entity.removeAll();
+                    getEngine().removeEntity(entity);
+                }
+            }else {
+                if (vc.speed.y > 0) {
+                    tc.position.set(tc.position.x, tc.position.y, ZUtil.FireballBackZ);
+                } else {
+                    tc.position.set(tc.position.x, tc.position.y, ZUtil.FireballFrontZ);
+                }
+
+                float currentScale = tc.scale.x;
+                float newScale;
+                if (currentScale < 0) {
+                    newScale = currentScale - (scaleRate * deltaTime);
+                    newScale = Math.max(-maxScale, newScale);
+
+                    tc.rotation += rotationRate * deltaTime;
+                    tc.rotation = Math.min(tc.rotation, absMaxRotation);
+                } else {
+                    newScale = currentScale + (scaleRate * deltaTime);
+                    newScale = Math.min(maxScale, newScale);
+
+                    tc.rotation -= rotationRate * deltaTime;
+                    tc.rotation = Math.max(tc.rotation, -absMaxRotation);
+                }
+                tc.scale.set(newScale, newScale);
             }
 
-            float currentScale = tc.scale.x;
-            float newScale;
-            if(currentScale < 0){
-                newScale = currentScale - (scaleRate*deltaTime);
-                newScale = Math.max(-maxScale, newScale);
-
-                tc.rotation += rotationRate*deltaTime;
-                tc.rotation = Math.min(tc.rotation, absMaxRotation);
-            }else{
-                newScale = currentScale + (scaleRate*deltaTime);
-                newScale = Math.min(maxScale, newScale);
-
-                tc.rotation -= rotationRate*deltaTime;
-                tc.rotation = Math.max(tc.rotation, -absMaxRotation);
-            }
-            tc.scale.set(newScale, newScale);
-
-            if(tc.position.y <= 1f){
-                lavaHitSound.play();
-                entity.removeAll();
-                getEngine().removeEntity(entity);
-            }
         }
 
 

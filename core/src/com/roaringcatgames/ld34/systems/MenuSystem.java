@@ -166,8 +166,8 @@ public class MenuSystem extends IteratingSystem {
     }
 
     private void generateTargets(){
-        Entity leftUnit = buildUnitComponent(-1.25f, 5f, -1f, 10f, false);
-        Entity rightUnit = buildUnitComponent(61.25f, 5f, 1f, -10f, true);
+        Entity leftUnit = buildUnitComponent(-1.25f, 7f, -1f, 10f, false);
+        Entity rightUnit = buildUnitComponent(61.25f, 7f, 1f, -10f, true);
 
         getEngine().addEntity(leftUnit);
         getEngine().addEntity(rightUnit);
@@ -183,13 +183,17 @@ public class MenuSystem extends IteratingSystem {
             .setUnitType(unitType));
         e.add(TransformComponent.create()
                 .setPosition(x, y, ZUtil.ArmyZ)
-                .setScale(2f * scaleX, 2f));
+                .setScale(1f * scaleX, 1f));
         if(isHorse) {
             e.add(AnimationComponent.create()
                     .addAnimation("DEFAULT", new Animation(1f / 10f, Assets.getHorsemanFrames())));
+            e.add(BoundsComponent.create()
+                    .setBounds(0f, 0f, 8f, 8f));
         }else{
             e.add(AnimationComponent.create()
                     .addAnimation("DEFAULT", new Animation(1f / 10f, Assets.getPikemanFrames())));
+            e.add(BoundsComponent.create()
+                    .setBounds(0f, 0f, 4f, 8f));
         }
 
         e.add(StateComponent.create()
@@ -198,8 +202,7 @@ public class MenuSystem extends IteratingSystem {
         e.add(VelocityComponent.create()
                 .setSpeed(xSpeed, 0f));
         e.add(KinematicComponent.create());
-        e.add(BoundsComponent.create()
-            .setBounds(0f, 0f, 4f, 8f));
+
         return e;
     }
 
