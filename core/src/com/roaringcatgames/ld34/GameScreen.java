@@ -340,17 +340,21 @@ public class GameScreen extends ScreenAdapter {
         grassBack.add(TransformComponent.create()
                 .setPosition(meterSize.x / 2f, 0f, 0f)
                 .setScale(1f, 1f));
-        grassBack.add(TextureComponent.create()
-                .setRegion(Assets.getBackGrass()));
+        grassBack.add(TextureComponent.create());
+        grassBack.add(AnimationComponent.create()
+            .addAnimation("DEFAULT", new Animation(1f / 3f, Assets.getGrassFrames(), Animation.PlayMode.LOOP)));
+        grassBack.add(StateComponent.create()
+            .set("DEFAULT")
+            .setLooping(true));
         engine.addEntity(grassBack);
 
-        Entity grassFront = engine.createEntity();
-        grassFront.add(TransformComponent.create()
-                .setPosition(meterSize.x / 2f + 1f, 0f, 0f)
-                .setScale(1f, 1f));
-        grassFront.add(TextureComponent.create()
-                .setRegion(Assets.getFrontGrass()));
-        engine.addEntity(grassFront);
+//        Entity grassFront = engine.createEntity();
+//        grassFront.add(TransformComponent.create()
+//                .setPosition(meterSize.x / 2f + 1f, 0f, 0f)
+//                .setScale(1f, 1f));
+//        grassFront.add(TextureComponent.create()
+//                .setRegion(Assets.getFrontGrass()));
+//        engine.addEntity(grassFront);
 
     }
     private void addClouds(){

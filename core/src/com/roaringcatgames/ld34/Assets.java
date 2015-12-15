@@ -79,10 +79,13 @@ public class Assets {
         return volcanoStateFrames;
     }
 
+    public static Array<TextureAtlas.AtlasRegion> getGrassFrames(){
+        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("Grass/Grass");
+    }
+
     public static Array<TextureAtlas.AtlasRegion> getSafeBannerFrames(){
         return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("Menu/Safe");
     }
-
     public static Array<TextureAtlas.AtlasRegion> getPikemanFrames(){
         return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("army/pikeman");
     }
