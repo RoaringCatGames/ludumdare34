@@ -57,7 +57,7 @@ public class WaveSystem extends IteratingSystem {
 
         if(isWaiting){
             timeBetweenWaves += deltaTime;
-            if(timeBetweenWaves >= 10f){
+            if(timeBetweenWaves >= 5f){
                 isWaiting = false;
                 timeBetweenWaves = 0f;
                 game.doEvent("STARTWAVE");
