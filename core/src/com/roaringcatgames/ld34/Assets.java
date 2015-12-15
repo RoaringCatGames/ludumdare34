@@ -73,9 +73,14 @@ public class Assets {
             volcanoStateFrames.put("DEFAULT", am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("volcano/VolcanoDefault"));
             volcanoStateFrames.put("FIRING", am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("volcano/VolcanoFiring"));
             volcanoStateFrames.put("CHARGING", am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("volcano/VolcanoCharge"));
+            volcanoStateFrames.put("ENDING", am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("volcano/VolcanoEnd"));
         }
 
         return volcanoStateFrames;
+    }
+
+    public static Array<TextureAtlas.AtlasRegion> getSafeBannerFrames(){
+        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("Menu/Safe");
     }
 
     public static Array<TextureAtlas.AtlasRegion> getPikemanFrames(){

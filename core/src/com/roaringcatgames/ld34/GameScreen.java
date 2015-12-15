@@ -1,6 +1,7 @@
 package com.roaringcatgames.ld34;
 
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -15,8 +16,6 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.roaringcatgames.ld34.components.*;
 import com.roaringcatgames.ld34.systems.*;
-
-import java.util.Random;
 
 /**
  * Created by barry on 12/9/15 @ 11:12 PM.
@@ -36,6 +35,8 @@ public class GameScreen extends ScreenAdapter {
     private Music wave3Music;
     private Music finalMusic;
 
+    private Music currentMusic;
+
     private Entity wave1Left;
     private Entity wave1Right;
     private Entity wave2Left;
@@ -43,8 +44,10 @@ public class GameScreen extends ScreenAdapter {
     private Entity wave3Left;
     private Entity wave3Right;
 
+
     private Entity fButton;
     private Entity jButton;
+    private Entity safeBanner;
 
     private float minXFirballForce = 6f;
 
@@ -58,13 +61,52 @@ public class GameScreen extends ScreenAdapter {
         switch(eventName){
             case "MENUOVER":
                 //Disable System
+                titleMusic.stop();
                 engine.getSystem(MenuSystem.class).setProcessing(false);
                 engine.getSystem(HealthRenderSystem.class).setProcessing(true);
-                titleMusic.stop();
-                wave1Music.play();
-                //StartWave
                 addWaveEmitters();
-                isWaving = true;
+                engine.getSystem(WaveSystem.class).setProcessing(true);
+                break;
+            case "STARTWAVE":
+                Gdx.app.log("Game Screen", "Starting wave " + wave + "!");
+                safeBanner.getComponent(StateComponent.class)
+                        .set("DOWN");
+                switch(wave){
+                    case 1:
+                        currentMusic = wave1Music;
+                        currentMusic.play();
+                        toggleWaves(wave1Left, wave1Right);
+                    case 2:
+                        currentMusic = wave2Music;
+                        currentMusic.play();
+                        toggleWaves(wave1Left, wave1Right);
+                        toggleWaves(wave2Left, wave2Right);
+                        break;
+                    case 3:
+                        currentMusic = wave3Music;
+                        currentMusic.play();
+                        toggleWaves(wave1Left, wave1Right);
+                        toggleWaves(wave2Left, wave2Right);
+                        toggleWaves(wave3Left, wave3Right);
+                        break;
+                    default:
+                        isWaving = false;
+                        Gdx.app.log("Game Screen", "You Survived!");
+                        engine.getEntitiesFor(Family.all(VolcanoComponent.class).get())
+                                .get(0)
+                                .getComponent(StateComponent.class)
+                                .set("ENDING")
+                                .setLooping(false);
+
+                        break;
+                }
+                wave++;
+                break;
+            case "STOPWAVE":
+                currentMusic.stop();
+                //TODO: Set banner animation state
+                safeBanner.getComponent(StateComponent.class)
+                        .set("UP");
                 break;
             case "GAMEOVER":
                 engine.getSystem(MovementSystem.class).setProcessing(false);
@@ -75,51 +117,12 @@ public class GameScreen extends ScreenAdapter {
 
 
     private boolean isWaving = false;
+    private boolean isWaiting = false;
     private float elapsedWaveTime = 0f;
+    private float timeBetweenWaves = 0f;
     private int wave = 1;
     private void update(float delta){
 
-        //TODO: Remove:
-        if(Gdx.input.isKeyJustPressed(Input.Keys.NUM_1)){
-            toggleWaves(wave1Left, wave1Right);
-        }
-
-        if(Gdx.input.isKeyJustPressed(Input.Keys.NUM_2)){
-            toggleWaves(wave2Left, wave2Right);
-        }
-
-        if(Gdx.input.isKeyJustPressed(Input.Keys.NUM_3)){
-            toggleWaves(wave3Left, wave3Right);
-        }
-
-
-        if(isWaving){
-            elapsedWaveTime += delta;
-            if(elapsedWaveTime >= 10*wave){
-                Gdx.app.log("GAME SCREEN", "Wave " + wave + " finished");
-                elapsedWaveTime = 0f;
-                wave++;
-                switch(wave){
-                    case 2:
-                        wave1Music.stop();
-                        wave2Music.play();
-                        toggleWaves(wave2Left, wave2Right);
-                        break;
-                    case 3:
-                        wave2Music.stop();
-                        wave3Music.play();
-                        toggleWaves(wave3Left, wave3Right);
-                        break;
-                    default:
-                        toggleWaves(wave1Left, wave1Right);
-                        toggleWaves(wave2Left, wave2Right);
-                        toggleWaves(wave3Left, wave3Right);
-                        isWaving = false;
-                        Gdx.app.log("Game Screen", "You Survived!");
-                        break;
-                }
-            }
-        }
 
         engine.update(delta);
         ActionProcessor.clear();
@@ -133,6 +136,7 @@ public class GameScreen extends ScreenAdapter {
             init();
         }
     }
+
 
     private void init(){
         Gdx.app.log("GameScreen", "Initializing");
@@ -155,6 +159,7 @@ public class GameScreen extends ScreenAdapter {
         engine.addSystem(new BoundsSystem());
         engine.addSystem(new ArmySpawnerSystem());
         engine.addSystem(new ArmyUnitSystem(this));
+        engine.addSystem(new WaveSystem(this));
         engine.addSystem(new LavaBallEmitterSystem());
         engine.addSystem(new LavaBallSystem(Assets.getMediumImpact()));
         engine.addSystem(new MenuSystem(this));
@@ -173,8 +178,25 @@ public class GameScreen extends ScreenAdapter {
         engine.addEntity(buildLavaBallEmitter(Input.Keys.J, minXFirballForce, 5f));
 
         engine.getSystem(HealthRenderSystem.class).setProcessing(false);
+        engine.getSystem(WaveSystem.class).setProcessing(false);
 
         addMenu();
+
+        safeBanner = engine.createEntity();
+
+        Vector2 meterSize = RenderingSystem.getScreenSizeInMeters();
+        safeBanner.add(TransformComponent.create()
+                .setPosition((meterSize.x / 2f) + 4f, 24f, ZUtil.TownZ + 1f)
+                .setRotation(0f)
+                .setScale(1f, 1f));
+        safeBanner.add(TextureComponent.create());
+        safeBanner.add(StateComponent.create()
+                .set("DEFAULT")
+                .setLooping(false));
+        safeBanner.add(AnimationComponent.create()
+            .addAnimation("UP", new Animation(1f / 19f, Assets.getSafeBannerFrames()))
+            .addAnimation("DOWN", new Animation(1f / 19f, Assets.getSafeBannerFrames(), Animation.PlayMode.REVERSED)));
+        engine.addEntity(safeBanner);
 
         titleMusic = Assets.getTitleMusic();
         titleMusic.play();
@@ -281,10 +303,14 @@ public class GameScreen extends ScreenAdapter {
         for(ObjectMap.Entry<String, Array<TextureAtlas.AtlasRegion>> kvp : Assets.getVolcanoStateFrames()){
 
             float frameTime = 1f/8f;
+            Animation.PlayMode mode = Animation.PlayMode.LOOP;
             if(kvp.key == "CHARGING"){
                 frameTime = 1f/16f;
+            }else if(kvp.key == "ENDING"){
+                frameTime = 4f/66f;
+                mode = Animation.PlayMode.NORMAL;
             }
-            a.addAnimation(kvp.key, new Animation(frameTime, kvp.value, Animation.PlayMode.LOOP));
+            a.addAnimation(kvp.key, new Animation(frameTime, kvp.value, mode));
         }
         e.add(a);
 

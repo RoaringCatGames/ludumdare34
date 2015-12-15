@@ -14,9 +14,6 @@ import com.roaringcatgames.ld34.Assets;
 import com.roaringcatgames.ld34.GameScreen;
 import com.roaringcatgames.ld34.ZUtil;
 import com.roaringcatgames.ld34.components.*;
-import com.sun.glass.ui.Menu;
-
-import java.security.Key;
 
 /**
  * Created by barry on 12/13/15 @ 1:32 PM.
@@ -37,6 +34,7 @@ public class MenuSystem extends IteratingSystem {
     private ComponentMapper<LavaBallComponent> lbm;
     private ComponentMapper<ArmyUnitComponent> aum;
     private ComponentMapper<VelocityComponent> vm;
+    private ComponentMapper<StateComponent> statem;
     private ComponentMapper<MenuItemComponent> mim;
 
     private int fireballCount = 0;
@@ -56,6 +54,7 @@ public class MenuSystem extends IteratingSystem {
         lbm = ComponentMapper.getFor(LavaBallComponent.class);
         aum = ComponentMapper.getFor(ArmyUnitComponent.class);
         vm = ComponentMapper.getFor(VelocityComponent.class);
+        statem = ComponentMapper.getFor(StateComponent.class);
         mim = ComponentMapper.getFor(MenuItemComponent.class);
 
         buttons = new Array<>();
@@ -93,6 +92,7 @@ public class MenuSystem extends IteratingSystem {
             VelocityComponent vc = vm.get(e);
             BoundsComponent bc = bm.get(e);
             ArmyUnitComponent ac = aum.get(e);
+            StateComponent sc = statem.get(e);
 
             if(vc.speed.x > 0 && tc.position.x >= 10f ||
                     vc.speed.x < 0 && tc.position.x <= 50f){
@@ -114,13 +114,20 @@ public class MenuSystem extends IteratingSystem {
                     getEngine().addEntity(bubble);
                     ac.isSpeaking = true;
                     if(vc.speed.x > 0){
+                        //pikeman
+                        bubble.add(TransformComponent.create()
+                                .setPosition(tc.position.x, tc.position.y + 4f, tc.position.z));
                         leftBubble = bubble;
                     }else{
+                        bubble.add(TransformComponent.create()
+                                .setPosition(tc.position.x, tc.position.y + 6f, tc.position.z));
                         rightBubble = bubble;
                     }
                 }
 
                 vc.setSpeed(0f, 0f);
+                sc.setLooping(false);
+
             }
 
             for(Entity lava:lavaBalls){
