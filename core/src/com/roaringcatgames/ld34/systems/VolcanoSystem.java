@@ -56,7 +56,7 @@ public class VolcanoSystem extends IteratingSystem {
                     ac.animations.get(sc.get()).isAnimationFinished(sc.time))){
                 sc.set("CHARGING");
                 sc.setLooping(true);
-            }else if(!isCharging && !isFiring &&
+            }else if(!isCharging && !isFiring && sc.get() != "ENDING" &&
                     ac.animations.get(sc.get()).isAnimationFinished(sc.time)){
                 sc.set("DEFAULT");
                 sc.setLooping(true);

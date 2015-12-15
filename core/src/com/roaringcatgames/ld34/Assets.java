@@ -32,7 +32,7 @@ public class Assets {
         am.load(FIGHTING, MUSIC);
         am.load(SMALL_IMPACT, SOUND);
         am.load(MED_IMPACT, SOUND);
-        am.load(VOLCANO_RUMBLE, SOUND);
+        am.load(VOLCANO_RUMBLE, MUSIC);
         am.load(LAVA_FLIGHT, SOUND);
 
 //        am.load(FONT, BITMAP_FONT);
@@ -193,8 +193,8 @@ public class Assets {
     public static Sound getMediumImpact(){
         return am.get(MED_IMPACT, SOUND);
     }
-    public static Sound getVolcanoRumble(){
-        return am.get(VOLCANO_RUMBLE, SOUND);
+    public static Music getVolcanoRumble(){
+        return am.get(VOLCANO_RUMBLE, MUSIC);
     }
     public static Sound getLavaFlightSound(){
         return am.get(LAVA_FLIGHT, SOUND);

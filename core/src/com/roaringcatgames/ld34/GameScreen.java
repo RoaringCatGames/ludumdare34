@@ -7,6 +7,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -36,6 +37,8 @@ public class GameScreen extends ScreenAdapter {
     private Music finalMusic;
 
     private Music currentMusic;
+
+    private Music volcanoRumble;
 
     private Entity wave1Left;
     private Entity wave1Right;
@@ -93,21 +96,42 @@ public class GameScreen extends ScreenAdapter {
                         toggleWaves(wave3Left, wave3Right);
                         break;
                     default:
-                        isWaving = false;
-                        Gdx.app.log("Game Screen", "You Survived!");
-                        //TODO: Play Final Music
-                        engine.getEntitiesFor(Family.all(VolcanoComponent.class).get())
-                                .get(0)
-                                .getComponent(StateComponent.class)
-                                .set("ENDING")
-                                .setLooping(false);
-
                         break;
                 }
                 wave++;
                 break;
-            case "STOPWAVE":
+
+            case "BEGINENDING":
+                Gdx.app.log("Game Screen", "You Survived!");
                 currentMusic.stop();
+                finalMusic.stop();
+                wave1Music.stop();
+                wave2Music.stop();
+                wave3Music.stop();
+                titleMusic.stop();
+
+                isEnding = true;
+                volcanoRumble.play();
+                volcanoRumble.setVolume(1f);
+                volcanoRumble.setLooping(false);
+                engine.getEntitiesFor(Family.all(VolcanoComponent.class).get())
+                        .get(0)
+                        .getComponent(StateComponent.class)
+                        .set("ENDING")
+                        .setLooping(false);
+
+                break;
+            case "STOPWAVE":
+                Gdx.app.log("Game Screen", "Stopping Music");
+                //PANNICING DON"T KNOW WHY CURRENT MUSIC IS WRONG
+                //  END IT ALL!!!
+                currentMusic.stop();
+                finalMusic.stop();
+                wave1Music.stop();
+                wave2Music.stop();
+                wave3Music.stop();
+                titleMusic.stop();
+
                 //TODO: Set banner animation state
                 safeBanner.getComponent(StateComponent.class)
                         .set("UP");
@@ -120,13 +144,13 @@ public class GameScreen extends ScreenAdapter {
     }
 
 
-    private boolean isWaving = false;
-    private boolean isWaiting = false;
-    private float elapsedWaveTime = 0f;
-    private float timeBetweenWaves = 0f;
+    private boolean isEnding = false;
     private int wave = 1;
     private void update(float delta){
 
+        if(isEnding && !volcanoRumble.isPlaying()){
+            finalMusic.play();
+        }
 
         engine.update(delta);
         ActionProcessor.clear();
@@ -198,8 +222,8 @@ public class GameScreen extends ScreenAdapter {
                 .set("DEFAULT")
                 .setLooping(false));
         safeBanner.add(AnimationComponent.create()
-            .addAnimation("UP", new Animation(1f / 19f, Assets.getSafeBannerFrames()))
-            .addAnimation("DOWN", new Animation(1f / 19f, Assets.getSafeBannerFrames(), Animation.PlayMode.REVERSED)));
+                .addAnimation("UP", new Animation(1f / 19f, Assets.getSafeBannerFrames()))
+                .addAnimation("DOWN", new Animation(1f / 19f, Assets.getSafeBannerFrames(), Animation.PlayMode.REVERSED)));
         engine.addEntity(safeBanner);
 
         titleMusic = Assets.getTitleMusic();
@@ -219,9 +243,11 @@ public class GameScreen extends ScreenAdapter {
         wave3Music.setLooping(true);
         wave3Music.setVolume(1f);
 //
-//        finalMusic = Assets.getEndMusic();
-//        finalMusic.setLooping(true);
-//        finalMusic.setVolume(1f);
+        finalMusic = Assets.getFinalMusic();
+        finalMusic.setLooping(true);
+        finalMusic.setVolume(1f);
+
+        volcanoRumble = Assets.getVolcanoRumble();
 
         isInitialized = true;
     }

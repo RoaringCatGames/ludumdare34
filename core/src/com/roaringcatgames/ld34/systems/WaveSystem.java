@@ -77,10 +77,16 @@ public class WaveSystem extends IteratingSystem {
                 if(units.size == 0) {
                     Gdx.app.log("Wave System", "Wave " + wave + " finished");
                     elapsedWaveTime = 0f;
-                    wave++;
-                    isWaiting = true;
-                    game.doEvent("STOPWAVE");
                     marchingMusic.stop();
+                    wave++;
+                    if(wave > 3){
+                        game.doEvent("BEGINENDING");
+                        isWaving = false;
+                    }else {
+                        isWaiting = true;
+                        game.doEvent("STOPWAVE");
+
+                    }
                 }
             }
         }
