@@ -376,9 +376,47 @@ public class GameScreen extends ScreenAdapter {
         grassBack.add(AnimationComponent.create()
             .addAnimation("DEFAULT", new Animation(1f / 3f, Assets.getGrassFrames(), Animation.PlayMode.LOOP)));
         grassBack.add(StateComponent.create()
-            .set("DEFAULT")
-            .setLooping(true));
+                .set("DEFAULT")
+                .setLooping(true));
         engine.addEntity(grassBack);
+
+
+//        Entity tree = engine.createEntity();
+//        tree.add(TransformComponent.create()
+//                .setPosition(meterSize.x / 2f, 7f, ZUtil.TownZ)
+//                .setScale(0.25f, 0.25f));
+//        tree.add(TextureComponent.create());
+//        tree.add(AnimationComponent.create()
+//                .addAnimation("DEFAULT", new Animation(1f / 15f, Assets.getPinkTreeFrames(), Animation.PlayMode.LOOP)));
+//        tree.add(StateComponent.create()
+//                .set("DEFAULT")
+//                .setLooping(true));
+//        engine.addEntity(tree);
+
+        Entity tree2 = engine.createEntity();
+        tree2.add(TransformComponent.create()
+                .setPosition((meterSize.x / 2f) - 4f, 10f, ZUtil.TownZ+1f)
+                .setScale(0.1f, 0.1f));
+        tree2.add(TextureComponent.create());
+        tree2.add(AnimationComponent.create()
+                .addAnimation("DEFAULT", new Animation(1f / 15f, Assets.getPinkTreeFrames(), Animation.PlayMode.LOOP)));
+        tree2.add(StateComponent.create()
+                .set("DEFAULT")
+                .setLooping(true));
+        engine.addEntity(tree2);
+
+        Entity tree3 = engine.createEntity();
+        tree3.add(TransformComponent.create()
+                .setPosition((meterSize.x / 2f) + 4f, 10f, ZUtil.TownZ + 1f)
+                .setScale(0.1f, 0.1f));
+        tree3.add(TextureComponent.create());
+        tree3.add(AnimationComponent.create()
+                .addAnimation("DEFAULT", new Animation(1f / 15f, Assets.getPinkTreeFrames(), Animation.PlayMode.LOOP)));
+        tree3.add(StateComponent.create()
+                .set("DEFAULT")
+                .setLooping(true));
+        engine.addEntity(tree3);
+
 
 //        Entity grassFront = engine.createEntity();
 //        grassFront.add(TransformComponent.create()
