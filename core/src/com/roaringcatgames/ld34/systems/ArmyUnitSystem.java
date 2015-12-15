@@ -4,7 +4,9 @@ import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.utils.Array;
+import com.roaringcatgames.ld34.Assets;
 import com.roaringcatgames.ld34.GameScreen;
 import com.roaringcatgames.ld34.components.*;
 
@@ -16,6 +18,8 @@ public class ArmyUnitSystem extends IteratingSystem {
     private GameScreen game;
     private Array<Entity> units;
     private Array<Entity> buildings;
+
+    Music fightinMusic;
 
     private ComponentMapper<BoundsComponent> bm;
     private ComponentMapper<VelocityComponent> vm;
@@ -36,6 +40,8 @@ public class ArmyUnitSystem extends IteratingSystem {
         this.game = game;
         units = new Array<>();
         buildings = new Array<>();
+
+        fightinMusic = Assets.getFighting();
     }
 
 
@@ -43,6 +49,7 @@ public class ArmyUnitSystem extends IteratingSystem {
     public void update(float deltaTime) {
         super.update(deltaTime);
 
+        boolean hasFighting = false;
         for(Entity unit:units){
             BoundsComponent ub = bm.get(unit);
             VelocityComponent vc = vm.get(unit);
@@ -52,6 +59,7 @@ public class ArmyUnitSystem extends IteratingSystem {
                 BoundsComponent bb = bm.get(building);
                 if(bb.bounds.overlaps(ub.bounds)){
                     isColliding = true;
+                    hasFighting = true;
                     vc.setSpeed(0f, 0f);
                     //Get Building Health here
                     HealthComponent buildingHealth = hm.get(building);
@@ -84,6 +92,13 @@ public class ArmyUnitSystem extends IteratingSystem {
             }
         }
 
+        if(hasFighting && !fightinMusic.isPlaying()){
+            fightinMusic.play();
+            fightinMusic.setLooping(true);
+            fightinMusic.setVolume(0.4f);
+        }else if(!hasFighting){
+            fightinMusic.stop();
+        }
         units.clear();
         buildings.clear();
     }

@@ -75,16 +75,19 @@ public class GameScreen extends ScreenAdapter {
                     case 1:
                         currentMusic = wave1Music;
                         currentMusic.play();
+                        currentMusic.setVolume(0.7f);
                         toggleWaves(wave1Left, wave1Right);
                     case 2:
                         currentMusic = wave2Music;
                         currentMusic.play();
+                        currentMusic.setVolume(0.8f);
                         toggleWaves(wave1Left, wave1Right);
                         toggleWaves(wave2Left, wave2Right);
                         break;
                     case 3:
                         currentMusic = wave3Music;
                         currentMusic.play();
+                        currentMusic.setVolume(0.9f);
                         toggleWaves(wave1Left, wave1Right);
                         toggleWaves(wave2Left, wave2Right);
                         toggleWaves(wave3Left, wave3Right);
@@ -92,6 +95,7 @@ public class GameScreen extends ScreenAdapter {
                     default:
                         isWaving = false;
                         Gdx.app.log("Game Screen", "You Survived!");
+                        //TODO: Play Final Music
                         engine.getEntitiesFor(Family.all(VolcanoComponent.class).get())
                                 .get(0)
                                 .getComponent(StateComponent.class)

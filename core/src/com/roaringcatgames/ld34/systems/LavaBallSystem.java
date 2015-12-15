@@ -80,7 +80,7 @@ public class LavaBallSystem extends IteratingSystem {
                 if(sc.get() != "EXPLODING") {
                     sc.set("EXPLODING")
                             .setLooping(false);
-                    lavaHitSound.play();
+                    lavaHitSound.play(1f);
                     vc.setSpeed(0f, 0f);
                     tc.setRotation(0f);
                     tc.setScale(1f, 1f);
