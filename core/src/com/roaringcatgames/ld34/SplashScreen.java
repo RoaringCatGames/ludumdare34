@@ -3,19 +3,15 @@ package com.roaringcatgames.ld34;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.ScreenAdapter;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Vector2;
-import com.roaringcatgames.ld34.components.AnimationComponent;
-import com.roaringcatgames.ld34.components.StateComponent;
-import com.roaringcatgames.ld34.components.TextureComponent;
-import com.roaringcatgames.ld34.components.TransformComponent;
-import com.roaringcatgames.ld34.systems.AnimationSystem;
-import com.roaringcatgames.ld34.systems.RenderingSystem;
+import com.roaringcatgames.kitten2d.ashley.components.AnimationComponent;
+import com.roaringcatgames.kitten2d.ashley.components.StateComponent;
+import com.roaringcatgames.kitten2d.ashley.components.TextureComponent;
+import com.roaringcatgames.kitten2d.ashley.components.TransformComponent;
+import com.roaringcatgames.kitten2d.ashley.systems.AnimationSystem;
+import com.roaringcatgames.kitten2d.ashley.systems.RenderingSystem;
 
 /**
  * Created by barry on 12/8/15 @ 8:24 PM.
@@ -40,7 +36,7 @@ public class SplashScreen extends LazyInitScreen {
         this.shapeRenderer = new ShapeRenderer();
 
         engine = new PooledEngine();
-        RenderingSystem render = new RenderingSystem(batch);
+        RenderingSystem render = new RenderingSystem(batch, ScreenHelper.PPM);
         engine.addSystem(new AnimationSystem());
         engine.addSystem(render);
 

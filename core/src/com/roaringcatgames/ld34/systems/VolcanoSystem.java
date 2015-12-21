@@ -4,11 +4,10 @@ import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
+import com.roaringcatgames.kitten2d.ashley.components.AnimationComponent;
+import com.roaringcatgames.kitten2d.ashley.components.StateComponent;
 import com.roaringcatgames.ld34.ActionProcessor;
-import com.roaringcatgames.ld34.components.AnimationComponent;
-import com.roaringcatgames.ld34.components.StateComponent;
 import com.roaringcatgames.ld34.components.VolcanoComponent;
 
 /**

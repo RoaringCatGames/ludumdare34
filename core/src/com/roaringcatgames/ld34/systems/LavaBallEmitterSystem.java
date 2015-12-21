@@ -11,6 +11,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ArrayMap;
+import com.roaringcatgames.kitten2d.ashley.components.*;
 import com.roaringcatgames.ld34.ActionProcessor;
 import com.roaringcatgames.ld34.Assets;
 import com.roaringcatgames.ld34.ZUtil;

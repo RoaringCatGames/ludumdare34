@@ -122,6 +122,7 @@ project(":core") {
         compile "com.badlogicgames.box2dlights:box2dlights:$box2DLightsVersion"
         compile "net.dermetfan.libgdx-utils:libgdx-utils-box2d:0.13.2"
         compile "net.dermetfan.libgdx-utils:libgdx-utils:0.13.2"
+        compile files('../../kitten2d-systems/ashley-extensions/build/libs/ashley-extensions-1.0.jar')
     }
 }
 

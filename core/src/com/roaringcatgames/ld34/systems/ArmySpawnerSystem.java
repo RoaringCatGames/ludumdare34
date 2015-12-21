@@ -5,12 +5,13 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.ashley.systems.IteratingSystem;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.utils.Array;
+import com.roaringcatgames.kitten2d.ashley.components.*;
 import com.roaringcatgames.ld34.Assets;
 import com.roaringcatgames.ld34.ZUtil;
-import com.roaringcatgames.ld34.components.*;
+import com.roaringcatgames.ld34.components.ArmySpawnerComponent;
+import com.roaringcatgames.ld34.components.ArmyUnitComponent;
 
 import java.util.Random;
 

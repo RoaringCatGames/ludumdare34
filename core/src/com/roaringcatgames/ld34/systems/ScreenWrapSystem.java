@@ -4,6 +4,11 @@ import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
+import com.roaringcatgames.kitten2d.ashley.components.BoundsComponent;
+import com.roaringcatgames.kitten2d.ashley.components.TextureComponent;
+import com.roaringcatgames.kitten2d.ashley.components.TransformComponent;
+import com.roaringcatgames.kitten2d.ashley.components.VelocityComponent;
+import com.roaringcatgames.ld34.ScreenHelper;
 import com.roaringcatgames.ld34.components.*;
 
 /**
@@ -41,7 +46,7 @@ public class ScreenWrapSystem extends IteratingSystem {
 
         if(bc == null){
             TextureComponent txc = txm.get(entity);
-            float regionWidthInMeters = txc.region.getRegionWidth()*RenderingSystem.PIXELS_TO_METRES;
+            float regionWidthInMeters = txc.region.getRegionWidth()* ScreenHelper.MPP;
             if(vc.speed.x > 0 &&
                tc.position.x - (regionWidthInMeters/2f) > right){
                 tc.position.set(left - regionWidthInMeters / 2f, tc.position.y, tc.position.z);

@@ -7,6 +7,7 @@ import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.utils.Array;
+import com.roaringcatgames.kitten2d.ashley.components.*;
 import com.roaringcatgames.ld34.Assets;
 import com.roaringcatgames.ld34.GameScreen;
 import com.roaringcatgames.ld34.ZUtil;

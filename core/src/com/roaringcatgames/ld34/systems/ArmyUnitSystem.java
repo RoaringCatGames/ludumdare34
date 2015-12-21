@@ -6,9 +6,11 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.utils.Array;
+import com.roaringcatgames.kitten2d.ashley.components.*;
 import com.roaringcatgames.ld34.Assets;
 import com.roaringcatgames.ld34.GameScreen;
-import com.roaringcatgames.ld34.components.*;
+import com.roaringcatgames.ld34.components.ArmyUnitComponent;
+import com.roaringcatgames.ld34.components.BuildingComponent;
 
 /**
  * Created by barry on 12/13/15 @ 4:42 PM.

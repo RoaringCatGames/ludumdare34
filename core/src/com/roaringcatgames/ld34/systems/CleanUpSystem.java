@@ -4,11 +4,9 @@ import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Rectangle;
-import com.roaringcatgames.ld34.components.BoundsComponent;
+import com.roaringcatgames.kitten2d.ashley.components.TransformComponent;
 import com.roaringcatgames.ld34.components.ScreenWrapComponent;
-import com.roaringcatgames.ld34.components.TransformComponent;
 
 /**
  * Created by barry on 12/12/15 @ 1:21 PM.

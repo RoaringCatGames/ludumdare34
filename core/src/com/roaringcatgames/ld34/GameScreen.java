@@ -15,6 +15,8 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
+import com.roaringcatgames.kitten2d.ashley.components.*;
+import com.roaringcatgames.kitten2d.ashley.systems.*;
 import com.roaringcatgames.ld34.components.*;
 import com.roaringcatgames.ld34.systems.*;
 
@@ -177,10 +179,10 @@ public class GameScreen extends ScreenAdapter {
 
         //Rendering system holds our camera so we hold a reference
         //  in case we need to pass it off to another system
-        RenderingSystem renderingSystem = new RenderingSystem(batch);
+        RenderingSystem renderingSystem = new RenderingSystem(batch, ScreenHelper.PPM);
 
         engine.addSystem(new CleanUpSystem(new Rectangle(-20f, -20f,
-                renderingSystem.getScreenSizeInMeters().x + 40f, renderingSystem.getScreenSizeInMeters().y + 40f)));
+                ScreenHelper.getScreenSizeInMeters().x + 40f, ScreenHelper.getScreenSizeInMeters().y + 40f)));
         engine.addSystem(new AnimationSystem());
         engine.addSystem(new VolcanoSystem(Input.Keys.F, Input.Keys.J));
         engine.addSystem(new GravitySystem(new Vector2(0f, -9.8f)));
@@ -214,7 +216,7 @@ public class GameScreen extends ScreenAdapter {
 
         safeBanner = engine.createEntity();
 
-        Vector2 meterSize = RenderingSystem.getScreenSizeInMeters();
+        Vector2 meterSize = ScreenHelper.getScreenSizeInMeters();
         safeBanner.add(TransformComponent.create()
                 .setPosition((meterSize.x / 2f) + 4f, 24f, ZUtil.TownZ + 1f)
                 .setRotation(0f)
@@ -255,7 +257,7 @@ public class GameScreen extends ScreenAdapter {
     }
 
     private void addWaveEmitters() {
-        Vector2 meterSize = RenderingSystem.getScreenSizeInMeters();
+        Vector2 meterSize = ScreenHelper.getScreenSizeInMeters();
         float armyEmitterHeight = 6f;
         wave1Left = buildArmyEmitter(1, 2f, -3.75f, armyEmitterHeight, 8f, 0f, true);
         wave1Right = buildArmyEmitter(-1,2f, meterSize.x+3.75f, armyEmitterHeight, 8f, 4f, true);
@@ -281,7 +283,7 @@ public class GameScreen extends ScreenAdapter {
                 .setTriggerKey(key)
                 .setEmissionVelocity(xVel, yVel));
 
-        Vector2 meterSize = RenderingSystem.getScreenSizeInMeters();
+        Vector2 meterSize = ScreenHelper.getScreenSizeInMeters();
         e.add(TransformComponent.create()
                 .setPosition(meterSize.x / 2f, meterSize.y / 2f, 1f)
                 .setRotation(15f)
@@ -307,7 +309,7 @@ public class GameScreen extends ScreenAdapter {
     private Entity buildBackground(){
         Entity e = engine.createEntity();
 
-        Vector2 meterSize = RenderingSystem.getScreenSizeInMeters();
+        Vector2 meterSize = ScreenHelper.getScreenSizeInMeters();
         e.add(TransformComponent.create()
                 .setPosition(meterSize.x / 2f, meterSize.y / 2f, 100f)
                 .setRotation(0f)
@@ -320,7 +322,7 @@ public class GameScreen extends ScreenAdapter {
     private Entity buildVolcano(){
         Entity e = engine.createEntity();
 
-        Vector2 meterSize = RenderingSystem.getScreenSizeInMeters();
+        Vector2 meterSize = ScreenHelper.getScreenSizeInMeters();
         e.add(TransformComponent.create()
                 .setPosition(meterSize.x / 2f, 14f, ZUtil.VolcanoZ)
                 .setRotation(0f)
@@ -350,7 +352,7 @@ public class GameScreen extends ScreenAdapter {
     }
 
     private void addGroundEnvironment(){
-        Vector2 meterSize = RenderingSystem.getScreenSizeInMeters();
+        Vector2 meterSize = ScreenHelper.getScreenSizeInMeters();
 
         Entity trees = engine.createEntity();
         trees.add(TransformComponent.create()
@@ -428,7 +430,7 @@ public class GameScreen extends ScreenAdapter {
 
     }
     private void addClouds(){
-        Vector2 meterSize = RenderingSystem.getScreenSizeInMeters();
+        Vector2 meterSize = ScreenHelper.getScreenSizeInMeters();
 
         float smallAdjust = 3f/4f;
         float backAdjust = 1f/2f;
@@ -437,25 +439,25 @@ public class GameScreen extends ScreenAdapter {
 
         engine.addEntity(createScreenWrappedEntity(meterSize.x / 2f, meterSize.y*backAdjust, 80f,
                 0f, 1f, 1f, Assets.getBackCloudFrames(), 1f));
-        engine.addEntity(createScreenWrappedEntity((meterSize.x / 2f) - RenderingSystem.PixelsToMeters(1000f),
+        engine.addEntity(createScreenWrappedEntity((meterSize.x / 2f) - ScreenHelper.PixelsToMeters(1000f),
                 meterSize.y*backAdjust, 80f,
                 0f, 1f, 1f, Assets.getBackCloudFrames(), 1f));
 
         engine.addEntity(createScreenWrappedEntity(meterSize.x / 2f, meterSize.y*midAdjust, 79f,
                 0f, 1f, 1f, Assets.getMidBackCloudFrames(), 2f));
-        engine.addEntity(createScreenWrappedEntity((meterSize.x / 2f) - RenderingSystem.PixelsToMeters(1000f),
+        engine.addEntity(createScreenWrappedEntity((meterSize.x / 2f) - ScreenHelper.PixelsToMeters(1000f),
                 meterSize.y * midAdjust, 79f,
                 0f, 1f, 1f, Assets.getMidBackCloudFrames(), 2f));
 
         engine.addEntity(createScreenWrappedEntity(meterSize.x / 2f, meterSize.y * midAdjust, 78f,
                 0f, 1f, 1f, Assets.getMidFrontCloudFrames(), 3f));
-        engine.addEntity(createScreenWrappedEntity((meterSize.x / 2f) - RenderingSystem.PixelsToMeters(1000f),
+        engine.addEntity(createScreenWrappedEntity((meterSize.x / 2f) - ScreenHelper.PixelsToMeters(1000f),
                 meterSize.y * midAdjust, 78f,
                 0f, 1f, 1f, Assets.getMidFrontCloudFrames(), 3f));
 
         engine.addEntity(createScreenWrappedEntity(meterSize.x / 2f, meterSize.y * frontAdjust, 77f,
                 0f, 1f, 1f, Assets.getFrontCloudFrames(), 4f));
-        engine.addEntity(createScreenWrappedEntity((meterSize.x / 2f) - RenderingSystem.PixelsToMeters(1000f),
+        engine.addEntity(createScreenWrappedEntity((meterSize.x / 2f) - ScreenHelper.PixelsToMeters(1000f),
                 meterSize.y * frontAdjust, 77f,
                 0f, 1f, 1f, Assets.getFrontCloudFrames(), 4f));
 
@@ -482,7 +484,7 @@ public class GameScreen extends ScreenAdapter {
         float midAdjust = 4f/6f;
         float lowAdjust = 2.75f/6f;
 
-        Vector2 meterSize = RenderingSystem.getScreenSizeInMeters();
+        Vector2 meterSize = ScreenHelper.getScreenSizeInMeters();
         Entity holdText = engine.createEntity();
         holdText.add(MenuItemComponent.create());
         holdText.add(TextureComponent.create()
