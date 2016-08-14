@@ -1,0 +1,17 @@
+{
+  "platform": "mac",
+  "jdk": "/Users/barry/DevTools/openjdks/openjdk-1.7.0-u80-unofficial-macosx-x86_64-image.zip",
+  "executable": "MountFuj",
+  "classpath": [
+    "/Users/barry/git-repos/mount-fuj/desktop/build/libs/mount-fuj-1.0.0.jar"
+  ],
+  "mainclass": "com.roaringcatgames.ld34.desktop.DesktopLauncher",
+  "vmargs": [
+    "-Xmx512m"
+  ],
+  "resources": [
+  ],
+  "minimizejre": "soft",
+  "outdir": "MountFuj.app",
+  "icon": "/Users/barry/git-repos/mount-fuj/ios/512x512.png.icns"
+}

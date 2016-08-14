@@ -1,0 +1,16 @@
+{
+  "platform": "windows64",
+  "jdk": "/Users/barry/DevTools/openjdks/openjdk-1.7.0-u80-unofficial-windows-amd64-image.zip",
+  "executable": "MountFuj",
+  "classpath": [
+    "/Users/barry/git-repos/mount-fuj/desktop/build/libs/mount-fuj-1.0.0.jar"
+  ],
+  "mainclass": "com.roaringcatgames.ld34.desktop.DesktopLauncher",
+  "vmargs": [
+    "-Xmx512m"
+  ],
+  "resources": [
+  ],
+  "minimizejre": "soft",
+  "outdir": "MountFuj_win64"
+}
